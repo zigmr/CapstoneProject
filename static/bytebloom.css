@@ -1,0 +1,41 @@
+html, body {
+    background-color: #686868;
+    
+    margin: 0px;
+    height: 100%;
+}
+
+#top-bar {
+    display: flex;
+    height: 200px;
+}
+
+#bar-div {
+    background-color: #d9d9d9;
+
+    width: 100%;
+    height: 100px;
+}
+
+#bar-div img {
+    height: 200px;
+    margin-left: 20px;
+}
+
+#panels {
+    display: flex;
+    padding: 0px 20px;
+
+    height: calc(100% - 200px);
+}
+
+#panels div {
+    background-color: #a1c8bb;
+
+    align-self: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 40px;
+    padding: 10px;
+    height: calc(100% - 75px);
+}

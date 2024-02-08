@@ -1,0 +1,42 @@
+#login-panel {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#login-panel form {
+    border: solid 2px #616e6a;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 25% 15% 35% 25%;
+}
+
+#login-panel label {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+#login-panel input {
+    grid-column-start: 3;
+    grid-column-end: 5;
+}
+
+#login-panel .submit {
+    grid-column-start: 2;
+    grid-column-end: 4;
+}
+
+#temp-panel {
+    display: flex;
+    width: 100%;
+
+    justify-content: center;
+    align-items: center;
+}
+
+#temp-panel p {
+    font-size: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
