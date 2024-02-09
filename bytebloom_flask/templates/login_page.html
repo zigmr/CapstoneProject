@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block unique_stylesheets %}<link rel="stylesheet" href="{{ url_for('static', filename='login_page.css') }}">{% endblock %}
+
+{% block content %}
+    <div id="panels">
+        <div id="login-panel">
+            <h2>Login</h3>
+            <form method="post">
+                <label for="username">Username: </label>
+                <input type="text" name="username">
+
+                <label for="password">Password: </label></span>
+                <input type="password" name="password">
+
+                <input type="submit" value="Submit" class="submit">
+            </form>
+        </div>
+
+        <div id="temp-panel">
+            <p>Import Design Here</p>
+        </div>
+    </div>
+{% endblock %}

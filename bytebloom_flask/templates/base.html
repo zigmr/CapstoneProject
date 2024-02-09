@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}{% endblock %} - ByteBloom</title>
+
+        <!-- Stylesheets used for Live Preview extension -->
+        <!-- <link rel="stylesheet" href="/static/bytebloom.css">
+
+        <!-- Stylesheets used for Flask server-->
+        <link rel="stylesheet" href="{{ url_for('static', filename='bytebloom.css') }}">
+        {% block unique_stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <div id="top-bar">
+            <div id="bar-div">
+                <img id="logo" src="/static/images/logo_v2.png">
+            </div>
+        </div>
+
+        {% block content %}{% endblock %}
+    </body>
+</html>
