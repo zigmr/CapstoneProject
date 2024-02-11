@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ByteBloom: Manager Dashboard</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      .navbar {
+        background-color: #333;
+        overflow: hidden;
+      }
+
+      .navbar-brand {
+        float: left;
+        padding: 10px 15px;
+        color: white;
+        font-size: 20px;
+        text-decoration: none;
+      }
+
+      .navbar-brand:hover {
+        background-color: #111;
+      }
+
+      .container {
+        display: flex;
+        height: 100vh;
+      }
+
+      .left-side {
+        flex: 1;
+        background-color: #f0f0f0;
+        overflow: hidden;
+      }
+
+      .right-side {
+        flex: 2;
+        background-color: #ddd;
+        overflow: hidden;
+      }
+
+      .box {
+        width: 350px;
+        overflow: hidden;
+        height: 600px;
+        background-color: #ffffff;
+        line-height: 40px;
+        margin: 30px;
+        border-radius: 5px;
+        box-shadow: 8px 8px 25px #d9d9d9, -8px -8px 25px #ffffff;
+      }
+
+      .nav-bar-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #333;
+        width: 100%;
+        height: auto;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+      }
+
+      .nav-bar-text {
+        float: left;
+        padding: 5px 15px;
+        color: white;
+        font-size: 15px;
+        text-decoration: none;
+      }
+
+      .container {
+        display: flex;
+      }
+
+      .card {
+        margin: 10px;
+        background-color: #959393;
+        height: 150px;
+        width: 100px;
+        flex: 1;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #d9d9d9;
+      }
+
+      .card:hover {
+        flex: 2;
+        background-color: #b8b8b8;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <a href="#" class="navbar-brand">ByteBloom</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+      <!-- Left Side Content -->
+      <div class="left-side">
+        <div class="box">
+          <div class="nav-bar-right">
+            <div class="nav-bar-text">Manager Profile</div>
+          </div>
+          <div class="content">
+            <!-- You can add manager specific content here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side Content -->
+      <div class="right-side">
+        <div class="box">
+          <div class="nav-bar-right">
+            <div class="nav-bar-text">Manager Dashboard</div>
+          </div>
+          <div class="container">
+            <div class="card">Reports</div>
+            <div class="card">Inventory</div>
+            <div class="card">Settings</div>
+            <!--You can add more manager specific cards here according to your project requirements -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
