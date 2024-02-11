@@ -15,8 +15,8 @@ def login_user():
     username = request.form['username']
     password = request.form['password']
     if username == secrets['ADMIN_USERNAME'] and password == secrets['ADMIN_PASSWORD']:
-        return f"<h1>Welcome, {username}.<h1><p>Logged in as ADMIN</p>"
+        return render_template('Manager_UI.html', username = username)
     elif username == secrets['CASHIER_USERNAME'] and password == secrets['CASHIER_PASSWORD']:
-        return f"<h1>Welcome, {username}.<h1><p>Logged in as CASHIER</p>"
+        return render_template('Cashier_UI.html', username = username)
     else:
         return "<h1>Your username or password was incorrect.</h1>"
