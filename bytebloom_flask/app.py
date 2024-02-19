@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from dotenv import dotenv_values
 
 # database ------------------------------
 
@@ -8,7 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 # Startup functions / --------------------
 
 app = Flask(__name__)
-secrets = dotenv_values()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bytebloom.db'
 
 # Database Information/classes --------
@@ -23,8 +21,6 @@ class Employee(db.Model):
     FirstName = db.Column(db.String(50))
     LastName = db.Column(db.String(50))
     Email = db.Column(db.String(100))
-
-
 
 class MenuItem(db.Model):
     __tablename__ = 'MenuItems'
