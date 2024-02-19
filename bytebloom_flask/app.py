@@ -21,18 +21,22 @@ class Employee(db.Model):
     FirstName = db.Column(db.String(50))
     LastName = db.Column(db.String(50))
     Email = db.Column(db.String(100))
+    credential = db.relationship("UserCredential", back_populates="employee")
 
-class MenuItem(db.Model):
-    __tablename__ = 'MenuItems'
+# ------------------------------------------------------------
+# Model temporarily disabled until employee login is debugged
+# ------------------------------------------------------------
+# class MenuItem(db.Model):
+#     __tablename__ = 'MenuItems'
 
-    MenuItemID = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(255), nullable=False)
-    ExpirationDate = db.Column(db.Date)
-    Pricing = db.Column(db.Numeric(10, 2))
-    Quantity = db.Column(db.Integer)
-    EmployeeID = db.Column(db.Integer, db.ForeignKey('Employees.EmployeeID'))  
+#     MenuItemID = db.Column(db.Integer, primary_key=True)
+#     Name = db.Column(db.String(255), nullable=False)
+#     ExpirationDate = db.Column(db.Date)
+#     Pricing = db.Column(db.Numeric(10, 2))
+#     Quantity = db.Column(db.Integer)
+#     EmployeeID = db.Column(db.Integer, db.ForeignKey('Employees.EmployeeID'))  
 
-    employee = db.relationship("Employee")
+#     employee = db.relationship("Employee")
 
 class UserCredential(db.Model):
 
@@ -41,7 +45,7 @@ class UserCredential(db.Model):
     Username = db.Column(db.String(50), unique=True, nullable=False)
     Password = db.Column(db.String(50), nullable=False)
     EmployeeID = db.Column(db.Integer, db.ForeignKey('Employees.EmployeeID'))
-    employee = db.relationship("Employee", back_populates="credentials")
+    employee = db.relationship("Employee", back_populates="credential")
 
 # documentation info ---------------
     # create database tables if they do not exist
@@ -63,13 +67,34 @@ def login_user():
     password = request.form.get('password')
     
     # Query the database to find matching username and password
-    user = UserCredential.query.filter_by(Username=username, Password=password).first()
+    valid_credential = UserCredential.query.filter_by(Username=username, Password=password).first()
     
-    if user:
-        return render_template('Manager_UI.html' if user.employee.FirstName == "Manager" else 'Cashier_UI.html', username=username)
+    if valid_credential:
+        print(f"Logged in user {username}. Full name: {valid_credential.employee.FirstName} {valid_credential.employee.LastName}")
+        return render_template('Manager_UI.html' if valid_credential.employee.FirstName == "Manager" else 'Cashier_UI.html', username=username)
     else:
         return "<h1>Your username or password was incorrect.</h1>"
 
+
+# CLI tool to drop all tables for testing. Run with "flask db_drop"
+# TODO: Delete this
+@app.cli.command('db_drop')
+def drop_all():
+    db.drop_all()
+
+# CLI tool to populate table with test data. Run with "flask db_populate"
+@app.cli.command("db_populate")
+def populate_users():
+    test_manager = Employee(EmployeeID=1, FirstName="Manager", LastName="Gamra", Email="test@test.org")
+    test_manager_credentials = UserCredential(Username="Manager", Password="foo", EmployeeID=1)
+    test_cashier = Employee(EmployeeID=2, FirstName="Nya", LastName="James", Email="test@test.org")
+    test_cashier_credentials = UserCredential(Username="Cashier", Password="bar", EmployeeID=2)
+
+    db.session.add(test_manager)
+    db.session.add(test_manager_credentials)
+    db.session.add(test_cashier)
+    db.session.add(test_cashier_credentials)
+    db.session.commit()
 
 # call the initialize_database function and pull up login
 initialize_database()
