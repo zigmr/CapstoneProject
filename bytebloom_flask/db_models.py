@@ -75,7 +75,7 @@ class MenuItem(db.Model):
     - price (float): the price of one unit of product.
     - image_path(str): the name of the image associated with the menu item. Does not include folder names.
         - When constructing a MenuItem, save the image used in image_path in the folder /bytebloom/static/images/menu_foods
-    - 
+    - visible (bool): whether or not the item is currently available on the menu. Defaults to True.
     
     Methods:
     - get_image_path(): Returns a string containing the location of the image for use in HTML files.
@@ -87,6 +87,7 @@ class MenuItem(db.Model):
     name = db.Column(db.String)
     price = db.Column(db.Float)
     image_path = db.Column(db.String)
+    visible = db.Column(db.Boolean, default=True)
 
     current_stock = db.relationship("MenuItemInfo", back_populates="menu_item")
 
@@ -98,10 +99,9 @@ class MenuItem(db.Model):
         """Returns a string containing the location of the image for use in HTML files."""
         return url_for('static', filename=os.path.join(app.config['UPLOAD_FOLDER'], self.image_path))
     
-    
-    # id = unique identifier
-    # mid, or menu item id
-    # pricing / quantity and expiration date
+def get_menu_items():
+    """Returns a list of MenuItems which are currently on the menu."""
+    pass
     
 class MenuItemInfo(db.Model):
     """Data representing a shipment of a single type of product.
@@ -185,9 +185,6 @@ def populate_users():
     db.session.add(white_bread)
 
     db.session.commit()
-
-    # for item in bread.current_stock:
-    #     print(item)
 
 # Startup --------
 initialize_database()   # call the initialize_database function and pull up login
