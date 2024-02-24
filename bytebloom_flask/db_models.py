@@ -101,7 +101,7 @@ class MenuItem(db.Model):
     
 def get_menu_items():
     """Returns a list of MenuItems which are currently on the menu."""
-    pass
+    return MenuItem.query.filter_by(visible=True)
     
 class MenuItemInfo(db.Model):
     """Data representing a shipment of a single type of product.
@@ -185,6 +185,11 @@ def populate_users():
     db.session.add(white_bread)
 
     db.session.commit()
+
+@app.cli.command("menu")
+def print_menu():
+    for item in get_menu_items():
+        print(item.name)
 
 # Startup --------
 initialize_database()   # call the initialize_database function and pull up login
