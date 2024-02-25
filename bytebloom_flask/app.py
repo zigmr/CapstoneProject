@@ -29,3 +29,9 @@ def login_user():
         return render_template('Manager_UI.html' if valid_credential.employee.FirstName == "Manager" else 'Cashier_UI.html', username=username)
     else:
         return "<h1>Your username or password was incorrect.</h1>"
+
+
+@app.route("/menu")
+def display_menu_page():
+    menu_contents = get_menu_items()
+    return render_template('menu_listing.html', menu_contents=menu_contents)

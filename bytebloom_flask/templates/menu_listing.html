@@ -1,0 +1,16 @@
+<table>
+    <thead>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+    </thead>
+    <tbody>
+        {% for item in menu_contents %}
+            <tr>
+                <td><img src="{{ item.get_image_path() }}" style="width:100px"></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
