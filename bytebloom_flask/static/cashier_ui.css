@@ -1,0 +1,156 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+
+.navbar-brand:hover {
+    background-color: #111;
+}
+
+/* screen */
+
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #a1c8bb;
+}
+
+.left-side {
+    flex: 1;
+    
+    /* background-color: #f0f0f0; */
+    background-color: #959393;
+    overflow: hidden;
+
+}
+
+.right-side {
+    flex: 2;
+    background-color: #959393;
+    overflow: hidden;
+}
+
+
+/* left side content */
+
+.box {
+width: 350px; /* Adjust width as needed */
+overflow: hidden;
+
+height: 600px; /* Adjust height as needed */
+background-color: #a1c8bb;
+line-height: 40px; /* Set line height for .box */
+margin: 30px;
+border-radius: 5px;
+box-shadow: 8px 8px 25px #d9d9d9, -8px -8px 25px #ffffff;
+}
+
+.box_2 {
+overflow: hidden;
+width: 800px; /* Adjust width as needed */
+height: 600px; /* Adjust height as needed */
+background-color: #ffffff;
+line-height: 40px; /* Set line height for .box_2 */
+margin: 30px;
+border-radius: 5px;
+box-shadow: 8px 8px 25px #d9d9d9, -8px -8px 25px #ffffff;
+}
+
+
+
+.nav-bar-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333;
+    width: 100%; /* Ensure the navbar spans the entire width of .box_2 */
+    height: auto; /* Allow the navbar to be only as tall as its content */
+    border-top-left-radius: 5px; /* Add border radius to match .box_2 */
+    border-top-right-radius: 5px; /* Add border radius to match .box_2 */
+    }   
+
+
+.nav-bar-text {
+    float: left;
+    padding: 5px 15px;
+    color: white;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.imagespace {
+
+padding: 5px;
+margin: 80px;
+display: grid;
+position: relative;
+border-style: solid;
+border-width: thin;
+
+}
+
+/* Button design */
+.container {
+display: flex;
+}
+
+.card {
+margin: 10px;
+background-color: #959393;
+height: 150px;
+width: 100px;
+flex: 1;
+border-radius: 16px;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+
+font-weight: bold;
+color: #d9d9d9;
+}
+
+.card:hover {
+flex: 2;
+background-color: #b8b8b8;
+}
+
+/* Profile Picture Design */
+
+.card_profile {
+margin: 75px;
+margin-top: 100px;
+width: 200px;
+height: 300px;
+padding: 10px;
+/* background-color: #777777; */
+background-color: #959393;
+border-radius: 5px;
+box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+
+.profileimage {
+background-color: transparent;
+border: none;
+margin-top: 10px;
+width: 50px;
+height: 50px;
+
+}
+
+.pfp {
+border-radius: 35em;
+fill: rgb(176, 176, 176);
+}
+
+.Name {
+color: white;
+font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+padding-left: 5px;
+padding-right: 5px;
+font-size: 12px;
+font-weight: 500;
+
+}
+
