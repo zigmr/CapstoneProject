@@ -1,5 +1,11 @@
+:root {
+    --color-cream: #d9d9d9;
+    --color-grey: #686868;
+    --color-green: #a1c8bb;
+}
+
 html, body {
-    background-color: #686868;
+    background-color: var(--color-grey);
     
     margin: 0px;
     height: 100%;
@@ -11,7 +17,7 @@ html, body {
 }
 
 #bar-div {
-    background-color: #d9d9d9;
+    background-color: var(--color-cream);
 
     width: 100%;
     height: 100px;
@@ -29,8 +35,8 @@ html, body {
     height: calc(100% - 200px);
 }
 
-#panels div {
-    background-color: #a1c8bb;
+#panels > div {
+    background-color: var(--color-green);
 
     align-self: center;
     margin-left: 20px;
