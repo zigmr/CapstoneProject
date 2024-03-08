@@ -47,34 +47,36 @@
       <!-- Menu Content Here-->
   
       <div id="menu">
-          <h1>Menu</h1>
-          <hr>
-          <div id="menu_container">
-              <table>
-                  <!-- <thead>
-                      <th>Image</th>
-                      <th>Name</th>
-                      <th>Price</th>
-                  </thead> -->
-                  <tbody>
-                      {% for item in menu_contents %}
-                          <tr>
-                              <td class="food-image"><img src="{{ item.get_image_path() }}"></td>
-                              <td class="food-name">{{ item.name }}</td>
-                              <td class="food-price">${{ item.price }}</td>
-                          </tr>
-                      {% endfor %}
-                  </tbody>
-              </table>
-          </div>
+        <div class="nav-bar">
+          <h1 class="nav-bar-text">Menu</h1>
+        </div>
+        <div id="menu_container">
+            <table>
+                <!-- <thead>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                </thead> -->
+                <tbody>
+                    {% for item in menu_contents %}
+                      <tr>
+                          <td class="food-image"><img src="{{ item.get_image_path() }}"></td>
+                          <td class="food-name">{{ item.name }}</td>
+                          <td class="food-price">${{ item.price }}</td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
       </div>    
 
       <!-- ----------------------------------------------------------------->
       <!-- Cart Content Here-->
   
       <div id="cart">
-          <h1>Cart</h1>
-          <hr>
+        <div class="nav-bar">
+          <h1 class="nav-bar-text">Cart</h1>
+        </div>
       </div>
     
     {% endblock %}

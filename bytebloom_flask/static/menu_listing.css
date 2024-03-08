@@ -1,15 +1,3 @@
-h1 {
-    font-size: 40px;
-    text-align: center;
-    margin: 10px 0px;
-}
-
-hr {
-    margin-bottom: 15px;
-    color: var(--color-grey)
-}
-
-
 /* Menu Styling */
 #menu {
     flex: 4;
@@ -18,8 +6,8 @@ hr {
 
 #menu_container {
     width: 100%;
-    height: calc(100% - 68px - 25px);
-    max-height: calc(100% - 68px - 25px);
+    height: calc(100% - 50px + 10px);
+    max-height: calc(100% - 50px + 10px);
     overflow: scroll;
 }
 
