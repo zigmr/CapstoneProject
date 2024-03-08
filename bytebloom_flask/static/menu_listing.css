@@ -9,8 +9,11 @@ hr {
     color: var(--color-grey)
 }
 
+
+/* Menu Styling */
 #menu {
-    width: 100%;
+    flex: 4;
+    border-radius: 5px;
 }
 
 #menu_container {
@@ -57,8 +60,11 @@ hr {
     margin-right: 5px;
 }
 
+/* Cart Styling */
+
 #cart {
-    width: max(25%, 300px);
+    flex: 2;
+    border-radius: 5px;
     flex-shrink: 0;
     overflow: scroll;
 }

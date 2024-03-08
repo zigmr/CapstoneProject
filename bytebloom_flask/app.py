@@ -26,7 +26,7 @@ def login_user():
     
     if valid_credential:
         print(f"Logged in user {username}. Full name: {valid_credential.employee.FirstName} {valid_credential.employee.LastName}")
-        return render_template('Manager_UI.html' if valid_credential.employee.FirstName == "Manager" else 'Cashier_UI.html', username=username)
+        return render_template('Manager_UI.html' if valid_credential.employee.FirstName == "Manager" else 'Cashier_UI.html', username=username, menu_contents=get_menu_items())
     else:
         return "<h1>Your username or password was incorrect.</h1>"
 
