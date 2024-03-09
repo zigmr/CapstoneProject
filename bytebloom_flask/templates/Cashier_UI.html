@@ -12,7 +12,8 @@
 {% endblock %} {% block content %}
     
     <div id="panels">
-        <!-- Left Side Content here -->
+      <!-- ----------------------------------------------------------------->
+      <!-- Left Side Content here -->
     
       <div class="user_panel">
         <div class="nav-bar">
@@ -50,7 +51,7 @@
         <div class="nav-bar">
           <h1 class="nav-bar-text">Menu</h1>
         </div>
-        <div id="menu_container">
+        <div id="menu-container">
             <table>
                 <!-- <thead>
                     <th>Image</th>
@@ -76,6 +77,66 @@
       <div id="cart">
         <div class="nav-bar">
           <h1 class="nav-bar-text">Cart</h1>
+        </div>
+          <div id="cart-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                  <th>Total Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="blank-row"></tr>
+                <!-- ----------------------------------------------------- -->
+                <!-- Example of what one item added to the cart looks like -->
+                <!-- ----------------------------------------------------- -->
+
+                <!-- <tr>
+                  <td class="cart-food-details">
+                    <img class="cart-food-image" src="pretend_this_image_is_real.png">
+                    this is the item name
+                  </td>
+                  <td class="cart-food-quantity">
+                    <form class="cart-adjust-quantity">
+                      <input type="button" value="+">   <!-- Adds 1 item -\->
+                      <p>1</p>                          <!-- Adjust the quantity in this paragraph using JS -\->
+                      <input type="button" value="-">   <!-- Removes 1 item -\->
+                      <input type="button" value="🗑">  <!-- Removes all of this item from the cart -\->
+                    </form>
+                  </td>
+                  <td class="cart-food-price">$0.00</td><!-- Update as cart changes -\->
+                </tr> -->
+
+                <!-- --------------------------------------------- -->
+                <!-- Example to fill the cart with 1 of every item -->
+                <!-- --------------------------------------------- -->
+
+                <!-- {% for item in menu_contents %}
+                <tr>
+                  <td class="cart-food-details">
+                    <img class="cart-food-image" src="{{ item.get_image_path() }}">
+                    {{ item.name }}
+                  </td>
+                  <td class="cart-food-quantity">
+                    <form class="cart-adjust-quantity">
+                      <input type="button" value="+">
+                      <p>1</p>
+                      <input type="button" value="-">
+                      <input type="button" value="🗑">
+                    </form>
+                  </td>
+                  <td class="cart-food-price">${{ item.price }}</td>
+                </tr>
+                {% endfor %} -->
+              </tbody>
+            </table>
+          </div>
+          <form id="cart-summary">
+            <input type="submit" value="Place Order" class="submit">
+            <p id="subtotal">$0.00</p>
+          </form>
         </div>
       </div>
     
