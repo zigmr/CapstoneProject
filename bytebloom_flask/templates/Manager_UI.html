@@ -1,17 +1,17 @@
 {% extends 'base.html' %} {% block title %}Manager Dashboard{% endblock %}
 
-{% block unique_stylesheets %}<link rel="stylesheet" href="{{ url_for('static', filename='manager_ui.css') }}">{% endblock %}
-
-
-
-
-{% block content %}
+{% block unique_stylesheets %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='manager_ui.css') }}"
+/>
+{% endblock %} {% block content %}
 <!-- Main Content -->
 <div class="container">
   <!-- Left Side Content -->
   <div class="left-side">
     <div class="box">
-      <div class="nav-bar-right">
+      <div class="nav-bar">
         <div class="nav-bar-text">Manager Profile</div>
       </div>
       <div class="content">
@@ -23,7 +23,7 @@
   <!-- Right Side Content -->
   <div class="right-side">
     <div class="box">
-      <div class="nav-bar-right">
+      <div class="nav-bar">
         <div class="nav-bar-text">Manager Dashboard</div>
       </div>
       <div class="container">
