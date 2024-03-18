@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, redirect, request
 
 # Startup functions / --------------------
 
@@ -27,8 +27,22 @@ def login_user():
     if valid_credential:
         print(f"Logged in user {username}. Full name: {valid_credential.employee.FirstName} {valid_credential.employee.LastName}")
         if valid_credential.EmployeeRole == "manager":
-            return render_template('Manager_UI.html', username=username)
+            return redirect(url_for('manager_home', full_name=str(valid_credential.employee)))
         else:
-            return render_template('Cashier_UI.html', username=username, menu_contents=get_menu_items())
+            return redirect(url_for('cashier_menu', full_name=str(valid_credential.employee)))
     else:
         return "<h1>Your username or password was incorrect.</h1>"
+    
+
+# Landing page for managers
+@app.route('/manager/home/<full_name>', methods=["GET"])
+def manager_home(full_name):
+    return render_template('Manager_UI.html',
+                           full_name=full_name)
+
+# Landing page for cashiers
+@app.route("/cashier/home/<full_name>", methods=["GET"])
+def cashier_menu(full_name):
+    return render_template('Cashier_UI.html',
+                           fullname=full_name,
+                           menu_contents=get_menu_items())

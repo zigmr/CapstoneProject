@@ -47,6 +47,9 @@ class Employee(db.Model):
     def __repr__(self):
         return f"{self.FirstName} {self.LastName}"
 
+    def __str__(self):
+        return f"{self.FirstName} {self.LastName}"    
+
 class UserCredential(db.Model):
     """Data representing one user's login information.
     
