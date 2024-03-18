@@ -11,21 +11,6 @@ body {
     width: 100%; /* Ensure the navbar spans the entire width of .box_2 */
     height: 50px; /* Allow the navbar to be only as tall as its content */
     border-radius: 5px;
-}  
-
-/* left side content */
-
-.user_panel {
-    flex: 1;
-    /* overflow: hidden; */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* justify-content: center; */
-
-    line-height: 40px; /* Set line height for .box */
-    border-radius: 5px;
-    /* box-shadow: 8px 8px 25px var(--color-cream), -8px -8px 25px #ffffff; */
 }
 
 /* currently unused content */
@@ -38,22 +23,8 @@ body {
     box-shadow: 8px 8px 25px var(--color-cream), -8px -8px 25px #ffffff;
 } */
 
-
-.nav-bar-text {
-    float: left;
-    padding: 5px 15px;
-    margin: 0px;
-    color: white;
-    font-size: 15px;
-    text-decoration: none;
-}
-
-/* Button design */
-.container {
-    display: flex;
-}
-
-.card {
+/* currently unused Button design */
+/* .card {
 margin: 10px;
 background-color: #959393;
 height: 150px;
@@ -72,46 +43,15 @@ color: var(--color-cream);
 .card:hover {
 flex: 2;
 background-color: #b8b8b8;
-}
+} */
 
-/* Profile Picture Design */
 
-.profile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    width: 80%;
-    height: 50%;
-    margin-top: auto;
-    margin-bottom: auto;
-
-    background-color: #959393;
-    border: 5px solid var(--color-grey);
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
-}
-
-.profile_image {
-    background-color: transparent;
-    border: none;
-    margin-top: 10px;
-    width: 50px;
-    height: 50px;
-}
-
-.pfp {
-    border-radius: 35em;
-    fill: rgb(176, 176, 176);
-}
-
-.profile_name {
+.nav-bar-text {
+    float: left;
+    padding: 5px 15px;
+    margin: 0px;
     color: white;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 15px;
+    text-decoration: none;
 }
 

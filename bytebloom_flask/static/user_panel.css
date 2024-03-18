@@ -1,0 +1,55 @@
+/* Stylesheet for representing a common user panel object across multiple pages*/
+
+.user-panel {
+    flex: 1;
+    /* overflow: hidden; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+
+    line-height: 40px; /* Set line height for .box */
+    border-radius: 5px;
+    /* box-shadow: 8px 8px 25px var(--color-cream), -8px -8px 25px #ffffff; */
+}
+
+/* Profile Picture Design */
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 80%;
+    height: 50%;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    background-color: #959393;
+    border: 5px solid var(--color-grey);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+
+.profile_image {
+    background-color: transparent;
+    border: none;
+    margin-top: 10px;
+    width: 50px;
+    height: 50px;
+}
+
+.pfp {
+    border-radius: 35em;
+    fill: rgb(176, 176, 176);
+}
+
+.profile-name {
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 12px;
+    font-weight: 500;
+}
