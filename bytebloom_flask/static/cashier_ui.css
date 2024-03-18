@@ -13,6 +13,15 @@ body {
     border-radius: 5px;
 }
 
+.nav-bar-text {
+    float: left;
+    padding: 5px 15px;
+    margin: 0px;
+    color: white;
+    font-size: 15px;
+    text-decoration: none;
+}
+
 /* currently unused content */
 /* .box_2 {
     width: 75%;
@@ -46,12 +55,5 @@ background-color: #b8b8b8;
 } */
 
 
-.nav-bar-text {
-    float: left;
-    padding: 5px 15px;
-    margin: 0px;
-    color: white;
-    font-size: 15px;
-    text-decoration: none;
-}
+
 

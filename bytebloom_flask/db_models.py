@@ -147,7 +147,7 @@ def drop_all():
 @app.cli.command("db_populate")
 def populate_users():
     """CLI tool to populate table with test data. Run with \"flask db_populate\""""
-    test_manager = Employee(FirstName="Manager", LastName="Gamra", Email="test@test.org")
+    test_manager = Employee(FirstName="Zineb", LastName="Gamra", Email="test@test.org")
     test_manager_credentials = UserCredential(Username="ZinebGamra", Password="foo", EmployeeRole="manager", employee=test_manager)
     test_cashier = Employee(FirstName="Nya", LastName="James", Email="test@test.org")
     test_cashier_credentials = UserCredential(Username="NyaJames", Password="bar", EmployeeRole="cashier", employee=test_cashier)

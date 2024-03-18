@@ -1,6 +1,6 @@
 /* Stylesheet for representing a common user panel object across multiple pages*/
 
-.user-panel {
+#user-panel {
     flex: 1;
     /* overflow: hidden; */
     display: flex;
