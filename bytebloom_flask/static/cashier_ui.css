@@ -13,6 +13,11 @@ body {
     border-radius: 5px;
 }  
 
+a {
+    color: black;
+    text-decoration: none;
+}
+
 /* left side content */
 
 .user_panel {
@@ -28,15 +33,9 @@ body {
     /* box-shadow: 8px 8px 25px var(--color-cream), -8px -8px 25px #ffffff; */
 }
 
-/* currently unused content */
-/* .box_2 {
-    width: 75%;
-    overflow: hidden;
-    
-    line-height: 40px; \/* Set line height for .box_2 *\/
-    border-radius: 5px;
-    box-shadow: 8px 8px 25px var(--color-cream), -8px -8px 25px #ffffff;
-} */
+#logout {
+    margin: 0px;
+}
 
 
 .nav-bar-text {

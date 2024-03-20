@@ -39,7 +39,10 @@
           </svg>
           </div>
           <div class="profile_name">
-            <p>{{ fullname }} @ Company</p>
+            {{ first_name }} {{ last_name }} @ Company
+          </div>
+          <div id="logout">
+            <button type="button"><a href="{{ url_for('logout')}}">Log Out</a></button>
           </div>
         </div>
       </div>

@@ -17,6 +17,15 @@
 
                 <input type="submit" value="Submit" class="submit">
             </form>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="error-flash">
+                    {% for message in messages %}
+                        <p>{{message}}</p>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
         </div>
 
         <div id="temp-panel">
