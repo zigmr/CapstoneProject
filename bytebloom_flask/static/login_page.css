@@ -7,7 +7,7 @@
 }
 
 #login-panel form {
-    border: solid 2px #616e6a;
+    border: solid 2px var(--color-grey);
     padding: 10px;
     display: grid;
     grid-template-columns: 25% 15% 35% 25%;

@@ -46,3 +46,29 @@ html, body {
     padding: 10px;
     height: calc(100% - 75px);
 }
+
+.error-flash {
+    background-color: var(--color-yellow);
+    width: 100%;
+    margin: 10px 20px;
+
+    border: solid 2px var(--color-grey);
+
+    text-align: center;
+
+    animation: blink 0.5s;
+}
+
+.error-flash p {
+    margin: 10px;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 100%;
+    }
+
+    50% {
+        opacity: 0%;
+    }
+}
