@@ -97,6 +97,19 @@ def manager_home():
                            first_name = session['first_name'],
                            last_name = session['last_name'])
 
+@app.route('/manager/alter-menu')
+def manager_menu_control():
+    # Check that the user is a manager
+    result = validate_user_type(['manager'])
+    if result is not True:
+        return result
+    
+    # If the user is a manager, show the page.
+    return render_template('manager_menu_control.html',
+                           first_name = session['first_name'],
+                           last_name = session['last_name'],
+                           current_menu_items = get_menu_items(),
+                           removed_menu_items = get_removed_menu_items())
 
 # ---------------------------------
 # Cashier pages

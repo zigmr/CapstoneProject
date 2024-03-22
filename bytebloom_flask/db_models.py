@@ -116,6 +116,10 @@ class MenuItem(db.Model):
 def get_menu_items():
     """Returns a list of MenuItems which are currently on the menu."""
     return MenuItem.query.filter_by(visible=True)
+
+def get_removed_menu_items():
+    """Returns a list of MenuItems which are currently not on the menu."""
+    return MenuItem.query.filter_by(visible=False)
     
 class MenuItemInfo(db.Model):
     """Data representing a shipment of a single type of product.
@@ -163,8 +167,8 @@ def populate_users():
     doughnut = MenuItem(name='doughnut', price=2.99, image_path='doughnut.jpg')
     pretzel = MenuItem(name='pretzel', price=2.99, image_path='pretzel.jpg')
     pound_cake = MenuItem(name='pound cake', price=2.99, image_path='poundcake.jpg')
-    brioche = MenuItem(name='brioche', price=2.99, image_path='brioche.jpg')
-    banana_bread = MenuItem(name='banana bread', price=2.99, image_path='bananabread.jpg')
+    brioche = MenuItem(name='brioche', price=2.99, image_path='brioche.jpg', visible=False)
+    banana_bread = MenuItem(name='banana bread', price=2.99, image_path='bananabread.jpg', visible=False)
     macaroon = MenuItem(name='macaroon', price=2.99, image_path='macaroon.jpg')
     white_bread = MenuItem(name='white bread', price=2.99, image_path='whitebread.jpg')
 
