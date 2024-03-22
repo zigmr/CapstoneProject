@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session
 
 # Startup functions / --------------------
 
@@ -79,6 +79,31 @@ def validate_user_type(required_user_types):
         return redirect(url_for('get_login_page'))
     return True
 
+# Returns JSON containing all objects currently in the menu
+@app.route('/current-menu-items', methods=["GET"])
+def current_menu_items():
+    current_items = []
+
+    for item in get_menu_items():
+        item_to_add = {"name": item.name,
+                       "price": item.price,
+                       "imageSource": item.get_image_path()}
+        current_items.append(item_to_add)
+    
+    return jsonify(current_items)
+
+# Returns JSON containing all objects currently removed from the menu
+@app.route('/removed-menu-items', methods=['GET'])
+def removed_menu_items():
+    removed_items = []
+
+    for item in get_removed_menu_items():
+        item_to_add = {"name": item.name,
+                       "price": item.price,
+                       "imageSource": item.get_image_path()}
+        removed_items.append(item_to_add)
+    
+    return jsonify(removed_items)
 
 # ---------------------------------
 # Manager pages
