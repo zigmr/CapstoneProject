@@ -152,22 +152,26 @@
             removeButton.addEventListener("click", () => {
                 newTR.remove();
 
-                // If the item was uploaded since the page loaded, remove it entirely.
-                let idx = toAddNew.indexOf(this);
+                let idx = toAddNew.indexOf(this);                        // If the item was uploaded since the page loaded, remove it entirely.
                 if (idx != -1) {
-                    // TODO: add confirmation prompt
-                    toAddNew = toAddNew.slice(0, idx).concat(toAddNew.slice(idx + 1));
-                    return;
+                    let userResponse = prompt(`Remove new item ${this.name} from the menu? Type "${this.name.toUpperCase()}" to confirm.`);
+                    console.log(userResponse)
+                    if (userResponse == this.name.toUpperCase()) {
+                        toAddNew = toAddNew.slice(0, idx).concat(toAddNew.slice(idx + 1));
+                        return;
+                    } else {
+                        alert("Item deletion not confirmed. No action was taken.");
+                        return;
+                    }
                 }
 
-                // Create a new version of the row for the "previous menu items" list
-                let removedVersionTR = this.getRemovedItemTableRow();
+                let removedVersionTR = this.getRemovedItemTableRow();   // Create a new version of the row for the "previous menu items" list
+                
 
-                // If the item was going to be reinstated but is being removed, don't mark it as recently moved
-                idx = toAddOld.indexOf(this);
+                idx = toAddOld.indexOf(this);                           // If the item was going to be reinstated but is being removed, don't mark it as recently moved
                 if (idx != -1) {
                     toAddOld = toAddOld.slice(0, idx).concat(toAddOld.slice(idx + 1));
-                } else {
+                } else {                                                // If the item was on the menu before the session, mark it as removed
                     toRemove.push(this);
                     removedVersionTR.className = "recently-moved";
                 }
@@ -198,7 +202,22 @@
 
             // Adds the listener to move the item to the current menu when "add" is clicked
             addButton.addEventListener("click", () => {
-                console.log("lol");
+                newTR.remove();
+
+                let idx = toRemove.indexOf(this);
+                let currentItemVersionTR = this.getCurrentItemTableRow();
+                if (idx != -1) {        // If the item was previously on the menu and is about to be removed, cancel the remove operation.
+                    toRemove = toRemove.slice(0, idx).concat(toRemove.slice(idx + 1));
+                } else {                // If the item is not queued to be removed, mark it as recently moved.
+                    toAddOld.push(this);
+                    currentItemVersionTR.className = "recently-moved";
+                }
+
+                idx = removedItems.indexOf(this);
+                removedItems = removedItems.slice(0, idx).concat(removedItems.slice(idx + 1));
+                removedItems.push(this);
+
+                document.querySelector("#current-menu tbody").appendChild(currentItemVersionTR);
             });
 
             return newTR;
@@ -211,10 +230,7 @@
      * @returns {Array.<MenuItem>}
      */
     async function loadCurrentItems() {
-        // Requests a JSON list of the current items from the Flask server at a specific address
-        // /current-menu-items is an API endpoint
         const currentItemsPromise = await fetch('/current-menu-items');
-        // Takes the JSON out of the Promise when it finishes
         const currentItemsJSON = await currentItemsPromise.json();
 
         let currentItemsTBody = document.querySelector("#current-menu tbody");
