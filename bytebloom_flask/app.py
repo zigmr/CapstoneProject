@@ -122,7 +122,7 @@ def manager_home():
                            first_name = session['first_name'],
                            last_name = session['last_name'])
 
-@app.route('/manager/alter-menu')
+@app.route('/manager/alter-menu', methods=["GET"])
 def manager_menu_control():
     # Check that the user is a manager
     result = validate_user_type(['manager'])
@@ -135,6 +135,34 @@ def manager_menu_control():
                            last_name = session['last_name'],
                            current_menu_items = get_menu_items(),
                            removed_menu_items = get_removed_menu_items())
+
+@app.route('/manager/alter-menu', methods=["POST"])
+def manager_post_menu_changes():
+    print(request.json)
+    new_items = request.json['newItems']
+    reinstated_items = request.json['reinstatedItems']
+    removed_items = request.json['removedItems']
+    # TODO: Add entirely new items to the menu
+
+    for item in reinstated_items:
+        query_result = MenuItem.query.filter_by(name=item['name'], price=item['price']).first()
+        if query_result is None:
+            print("ITEM NOT FOUND: " + item['name'])
+        else:
+            print("Item returned to menu: " + query_result.name)
+            query_result.visible = True
+    
+    for item in removed_items:
+        query_result = MenuItem.query.filter_by(name=item['name'], price=item['price']).first()
+        if query_result is None:
+            print("ITEM NOT FOUND: " + item['name'])
+        else:
+            print("Item removed from menu: " + query_result.name)
+            query_result.visible = False
+
+    db.session.commit()
+    
+    return jsonify({"changes_complete": True})
 
 # ---------------------------------
 # Cashier pages

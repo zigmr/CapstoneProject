@@ -59,7 +59,7 @@
             <h1 class="nav-bar-text">Add Menu Items</h1>
         </div>
         <div id="new-item-controls">
-            <button type="submit">Save Changes</button>
+            <button type="submit" id="save-changes">Save Changes</button>
         </div>
     </div>
 
@@ -263,6 +263,27 @@
      * @type {Array<MenuItem>}
      */
     let toRemove = [];
+
+    async function sendChanges() {
+        changesData = {
+            newItems: toAddNew,
+            reinstatedItems: toAddOld,
+            removedItems: toRemove
+        }
+
+        my_response = await fetch("/manager/alter-menu",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(changesData)
+        });
+
+        console.log(await my_response.json())
+    }
+
+    document.querySelector("#save-changes").addEventListener("click", sendChanges);
 
     loadCurrentItems();
     loadRemovedItems();
