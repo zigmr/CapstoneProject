@@ -176,11 +176,6 @@
                     removedVersionTR.className = "recently-moved";
                 }
 
-                // Move this MenuItem from the internal array of current items to the one for removed items
-                idx = currentItems.indexOf(this);
-                currentItems = currentItems.slice(0, idx).concat(currentItems.slice(idx + 1));
-                removedItems.push(this);
-
                 // Put the new row into the "removed" column
                 document.querySelector("#previous-menu tbody").appendChild(removedVersionTR);
             });
@@ -213,10 +208,6 @@
                     currentItemVersionTR.className = "recently-moved";
                 }
 
-                idx = removedItems.indexOf(this);
-                removedItems = removedItems.slice(0, idx).concat(removedItems.slice(idx + 1));
-                removedItems.push(this);
-
                 document.querySelector("#current-menu tbody").appendChild(currentItemVersionTR);
             });
 
@@ -237,12 +228,8 @@
         
         currentItemsJSON.forEach(element => {
             menuItemElement = new MenuItem(element.imageSource, element.name, element.price);
-            currentItems.push(menuItemElement);
-            
             currentItemsTBody.appendChild(menuItemElement.getCurrentItemTableRow());
         });
-
-        return currentItems;
     }
 
     /**
@@ -258,23 +245,9 @@
         
         removedItemsJSON.forEach(element => {
             menuItemElement = new MenuItem(element.imageSource, element.name, element.price);
-            removedItems.push(menuItemElement);
-            
             removedItemsTBody.appendChild(menuItemElement.getRemovedItemTableRow());
         });
-
-        return currentItems;
     }
-
-    /** Stores all items on the local version of the current menu
-     * @type {Array<MenuItem>}
-     */
-    let currentItems = [];
-    
-    /** Stores all items on the local version of the list of removed items
-     * @type {Array<MenuItem>}
-     */
-    let removedItems = [];
 
     /** Stores entirely new items slated to be added when the page is submitted
      * @type {Array<MenuItem>}
