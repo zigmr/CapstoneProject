@@ -111,7 +111,7 @@ class MenuItem(db.Model):
     
     def get_image_path(self):
         """Returns a string containing the location of the image for use in HTML files."""
-        return url_for('static', filename=os.path.join(app.config['UPLOAD_FOLDER'], self.image_path))
+        return url_for('static', filename=app.config['UPLOAD_FOLDER'] + "/" + self.image_path)
     
 def get_menu_items():
     """Returns a list of MenuItems which are currently on the menu."""

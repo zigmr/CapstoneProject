@@ -12,6 +12,7 @@ Bytebloom is software which facilitates quick and efficient order processing for
 Bytebloom contains a number of command line tools which provide useful functionality while the server is not running. **To execute these commands, your working directory must be "bytebloom_flask".**
 
 ### Database Commands
+|To view the content of bytebloom.db download the "SQLite Viewer" extension.|
 |Command|Effect|
 |-|-|
 |flask db_populate|Fills the database with example data, creating a local database if none is provided.|
