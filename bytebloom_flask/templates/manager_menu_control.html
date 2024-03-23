@@ -73,15 +73,7 @@
         <div class="vertical-menu-container">
             <table>
                 <tbody>
-                    <!-- {% for item in current_menu_items %}
-                        <tr>
-                            <td class="food-image"><img src="{{ item.get_image_path() }}"></td>
-                            <td class="food-name">{{ item.name }}</td>
-                            <td class="food-price">${{ item.price }}</td>
-                            <td class="food-edit"><button type="button">Edit Details</button></td>
-                            <td class="food-remove"><button type="button">Remove From Menu</button></td>
-                        </tr>
-                    {% endfor %} -->
+                    <!-- JavaScript loads rows into here -->
                 </tbody>
             </table>
         </div>
@@ -97,18 +89,126 @@
         <div class="vertical-menu-container">
             <table>
                 <tbody>
-                    <!-- {% for item in removed_menu_items %}
-                        <tr>
-                            <td class="food-image"><img src="{{ item.get_image_path() }}"></td>
-                            <td class="food-name">{{ item.name }}</td>
-                            <td class="food-price">${{ item.price }}</td>
-                            <td class="food-edit"><button type="button">Edit Details</button></td>
-                            <td class="food-add"><button type="button">Add To Menu</button></td>
-                        </tr>
-                    {% endfor %} -->
+                    <!-- JavaScript loads rows into here -->
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<script>
+    // // Declare variables containing each item that is on the menu or was on the menu in the past.
+    // var currentItems = [];
+    // var pastItems = [];
+
+    // // Declare variables to keep track of what changes are being made to the menu
+    // let itemsToAdd = [];
+    // let itemsToDelete = [];
+    // let itemsToEdit = [];
+
+    // Define class for a single menu item
+    class MenuItem {
+        constructor(imageSource, name, price) {
+            this.imageSource = imageSource;
+            this.name = name;
+            this.price = price;
+        }
+
+        getGenericTableRow() {
+            const newTR = document.createElement("tr");
+            
+            const imageTD = document.createElement("td");
+            imageTD.className = "food-image";
+            const imageTag = document.createElement("img");
+            imageTag.src = this.imageSource;
+            imageTD.appendChild(imageTag);
+            newTR.appendChild(imageTD);
+
+            const nameTD = document.createElement("td");
+            nameTD.className = "food-name";
+            nameTD.innerHTML = this.name;
+            newTR.appendChild(nameTD);
+
+            const priceTD = document.createElement("td");
+            priceTD.className = "food-price";
+            priceTD.innerHTML = this.price;
+            newTR.appendChild(priceTD);
+
+            const editTD = document.createElement("td");
+            editTD.className = "food-edit";
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.innerHTML = "Edit Details";
+            editTD.appendChild(editButton);
+            newTR.appendChild(editTD);
+
+            return newTR;
+        }
+
+        getCurrentItemTableRow() {
+            const newTR = this.getGenericTableRow();
+
+            const removeTD = document.createElement("td");
+            removeTD.className = "food-remove";
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.innerHTML = "Remove From Menu";
+            removeTD.appendChild(removeButton);
+            newTR.appendChild(removeTD);
+
+            return newTR;
+        }
+
+        getRemovedItemTableRow() {
+            const newTR = this.getGenericTableRow();
+
+            const removeTD = document.createElement("td");
+            removeTD.className = "food-remove";
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.innerHTML = "Remove From Menu";
+            removeTD.appendChild(removeButton);
+            newTR.appendChild(removeTD);
+
+            return newTR;
+        }
+    }
+    
+    async function loadCurrentItems() {
+        const currentItemsPromise = await fetch('/current-menu-items');
+        const currentItemsJSON = await currentItemsPromise.json();
+
+        let currentItems = [];
+        let currentItemsTBody = document.querySelector("#current-menu tbody");
+        
+        currentItemsJSON.forEach(element => {
+            menuItemElement = new MenuItem(element.imageSource, element.name, element.price);
+            currentItems.push(menuItemElement);
+            
+            currentItemsTBody.appendChild(menuItemElement.getCurrentItemTableRow());
+        });
+
+        return currentItems;
+    }
+
+    async function loadRemovedItems() {
+        const removedItemsPromise = await fetch('/removed-menu-items');
+        const removedItemsJSON = await removedItemsPromise.json();
+
+        let removedItems = [];
+        let removedItemsTBody = document.querySelector("#previous-menu tbody");
+        
+        removedItemsJSON.forEach(element => {
+            menuItemElement = new MenuItem(element.imageSource, element.name, element.price);
+            removedItems.push(menuItemElement);
+            
+            removedItemsTBody.appendChild(menuItemElement.getRemovedItemTableRow());
+        });
+
+        return currentItems;
+    }
+
+    loadCurrentItems();
+    loadRemovedItems();
+</script>
 {% endblock %}
