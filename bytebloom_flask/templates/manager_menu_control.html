@@ -99,7 +99,8 @@
 <script>
     /** Defines class for a single menu item */
     class MenuItem {
-        constructor(imageSource, name, price) {
+        constructor(id, imageSource, name, price) {
+            this.id = id
             this.imageSource = imageSource;
             this.name = name;
             this.price = price;
@@ -227,7 +228,7 @@
         let currentItemsTBody = document.querySelector("#current-menu tbody");
         
         currentItemsJSON.forEach(element => {
-            menuItemElement = new MenuItem(element.imageSource, element.name, element.price);
+            menuItemElement = new MenuItem(element.id, element.imageSource, element.name, element.price);
             currentItemsTBody.appendChild(menuItemElement.getCurrentItemTableRow());
         });
     }
@@ -244,7 +245,7 @@
         let removedItemsTBody = document.querySelector("#previous-menu tbody");
         
         removedItemsJSON.forEach(element => {
-            menuItemElement = new MenuItem(element.imageSource, element.name, element.price);
+            menuItemElement = new MenuItem(element.id, element.imageSource, element.name, element.price);
             removedItemsTBody.appendChild(menuItemElement.getRemovedItemTableRow());
         });
     }

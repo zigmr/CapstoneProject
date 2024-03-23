@@ -85,7 +85,8 @@ def current_menu_items():
     current_items = []
 
     for item in get_menu_items():
-        item_to_add = {"name": item.name,
+        item_to_add = {"id": item.mid,
+                       "name": item.name,
                        "price": item.price,
                        "imageSource": item.get_image_path()}
         current_items.append(item_to_add)
@@ -98,7 +99,8 @@ def removed_menu_items():
     removed_items = []
 
     for item in get_removed_menu_items():
-        item_to_add = {"name": item.name,
+        item_to_add = {"id": item.mid,
+                       "name": item.name,
                        "price": item.price,
                        "imageSource": item.get_image_path()}
         removed_items.append(item_to_add)
@@ -138,14 +140,14 @@ def manager_menu_control():
 
 @app.route('/manager/alter-menu', methods=["POST"])
 def manager_post_menu_changes():
-    print(request.json)
+    # print(request.json)
     new_items = request.json['newItems']
     reinstated_items = request.json['reinstatedItems']
     removed_items = request.json['removedItems']
     # TODO: Add entirely new items to the menu
 
     for item in reinstated_items:
-        query_result = MenuItem.query.filter_by(name=item['name'], price=item['price']).first()
+        query_result = MenuItem.query.filter_by(mid=item['id']).first()
         if query_result is None:
             print("ITEM NOT FOUND: " + item['name'])
         else:
@@ -153,7 +155,7 @@ def manager_post_menu_changes():
             query_result.visible = True
     
     for item in removed_items:
-        query_result = MenuItem.query.filter_by(name=item['name'], price=item['price']).first()
+        query_result = MenuItem.query.filter_by(mid=item['id']).first()
         if query_result is None:
             print("ITEM NOT FOUND: " + item['name'])
         else:
