@@ -34,10 +34,14 @@
 }
 
 .vertical-menu-container .food-image img {
-    height: 200px;
-    width: 145px;
+    height: 150px;
+    width: 150px;
 }
 
 .vertical-menu-container tr {
     outline: var(--color-grey) solid 1px;
+}
+
+.recently-moved {
+    background-color: var(--color-yellow);
 }

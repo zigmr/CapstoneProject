@@ -97,16 +97,7 @@
 </div>
 
 <script>
-    // // Declare variables containing each item that is on the menu or was on the menu in the past.
-    // var currentItems = [];
-    // var pastItems = [];
-
-    // // Declare variables to keep track of what changes are being made to the menu
-    // let itemsToAdd = [];
-    // let itemsToDelete = [];
-    // let itemsToEdit = [];
-
-    // Define class for a single menu item
+    /** Defines class for a single menu item */
     class MenuItem {
         constructor(imageSource, name, price) {
             this.imageSource = imageSource;
@@ -148,6 +139,7 @@
         getCurrentItemTableRow() {
             const newTR = this.getGenericTableRow();
 
+            // Adds the button to remove the item from the menu
             const removeTD = document.createElement("td");
             removeTD.className = "food-remove";
             const removeButton = document.createElement("button");
@@ -155,6 +147,39 @@
             removeButton.innerHTML = "Remove From Menu";
             removeTD.appendChild(removeButton);
             newTR.appendChild(removeTD);
+
+            // Adds the listener to move the item to the removed list when "remove" is clicked
+            removeButton.addEventListener("click", () => {
+                newTR.remove();
+
+                // If the item was uploaded since the page loaded, remove it entirely.
+                let idx = toAddNew.indexOf(this);
+                if (idx != -1) {
+                    // TODO: add confirmation prompt
+                    toAddNew = toAddNew.slice(0, idx).concat(toAddNew.slice(idx + 1));
+                    return;
+                }
+
+                // Create a new version of the row for the "previous menu items" list
+                let removedVersionTR = this.getRemovedItemTableRow();
+
+                // If the item was going to be reinstated but is being removed, don't mark it as recently moved
+                idx = toAddOld.indexOf(this);
+                if (idx != -1) {
+                    toAddOld = toAddOld.slice(0, idx).concat(toAddOld.slice(idx + 1));
+                } else {
+                    toRemove.push(this);
+                    removedVersionTR.className = "recently-moved";
+                }
+
+                // Move this MenuItem from the internal array of current items to the one for removed items
+                idx = currentItems.indexOf(this);
+                currentItems = currentItems.slice(0, idx).concat(currentItems.slice(idx + 1));
+                removedItems.push(this);
+
+                // Put the new row into the "removed" column
+                document.querySelector("#previous-menu tbody").appendChild(removedVersionTR);
+            });
 
             return newTR;
         }
@@ -162,23 +187,36 @@
         getRemovedItemTableRow() {
             const newTR = this.getGenericTableRow();
 
-            const removeTD = document.createElement("td");
-            removeTD.className = "food-remove";
-            const removeButton = document.createElement("button");
-            removeButton.type = "button";
-            removeButton.innerHTML = "Remove From Menu";
-            removeTD.appendChild(removeButton);
-            newTR.appendChild(removeTD);
+            // Adds the button to reinstate the item into the menu
+            const addTD = document.createElement("td");
+            addTD.className = "food-remove";
+            const addButton = document.createElement("button");
+            addButton.type = "button";
+            addButton.innerHTML = "Add To Menu";
+            addTD.appendChild(addButton);
+            newTR.appendChild(addTD);
+
+            // Adds the listener to move the item to the current menu when "add" is clicked
+            addButton.addEventListener("click", () => {
+                console.log("lol");
+            });
 
             return newTR;
         }
     }
     
+    /**
+     * Loads the items currently on the menu into the page and into a JS list.
+     * 
+     * @returns {Array.<MenuItem>}
+     */
     async function loadCurrentItems() {
+        // Requests a JSON list of the current items from the Flask server at a specific address
+        // /current-menu-items is an API endpoint
         const currentItemsPromise = await fetch('/current-menu-items');
+        // Takes the JSON out of the Promise when it finishes
         const currentItemsJSON = await currentItemsPromise.json();
 
-        let currentItems = [];
         let currentItemsTBody = document.querySelector("#current-menu tbody");
         
         currentItemsJSON.forEach(element => {
@@ -191,11 +229,15 @@
         return currentItems;
     }
 
+    /**
+     * Loads the items which are removed from the menu into the page and into a JS list.
+     * 
+     * @returns {Array.<MenuItem>}
+     */
     async function loadRemovedItems() {
         const removedItemsPromise = await fetch('/removed-menu-items');
         const removedItemsJSON = await removedItemsPromise.json();
 
-        let removedItems = [];
         let removedItemsTBody = document.querySelector("#previous-menu tbody");
         
         removedItemsJSON.forEach(element => {
@@ -207,6 +249,31 @@
 
         return currentItems;
     }
+
+    /** Stores all items on the local version of the current menu
+     * @type {Array<MenuItem>}
+     */
+    let currentItems = [];
+    
+    /** Stores all items on the local version of the list of removed items
+     * @type {Array<MenuItem>}
+     */
+    let removedItems = [];
+
+    /** Stores entirely new items slated to be added when the page is submitted
+     * @type {Array<MenuItem>}
+     */
+    let toAddNew = [];
+
+    /** Stores items already in the database slated to be reinstated when the page is submitted
+     * @type {Array<MenuItem>}
+     */
+    let toAddOld = [];
+
+    /** Stores items slated to be removed when the page is submitted
+     * @type {Array<MenuItem>}
+     */
+    let toRemove = [];
 
     loadCurrentItems();
     loadRemovedItems();
