@@ -1,26 +1,6 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-}
+/* Stylesheet for representing a common user panel object across multiple pages*/
 
-.nav-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #333;
-    width: 100%; /* Ensure the navbar spans the entire width of .box_2 */
-    height: 50px; /* Allow the navbar to be only as tall as its content */
-    border-radius: 5px;
-}  
-
-a {
-    color: black;
-    text-decoration: none;
-}
-
-/* left side content */
-
-.user_panel {
+#user-panel {
     flex: 1;
     /* overflow: hidden; */
     display: flex;
@@ -31,46 +11,6 @@ a {
     line-height: 40px; /* Set line height for .box */
     border-radius: 5px;
     /* box-shadow: 8px 8px 25px var(--color-cream), -8px -8px 25px #ffffff; */
-}
-
-#logout {
-    margin: 0px;
-}
-
-
-.nav-bar-text {
-    float: left;
-    padding: 5px 15px;
-    margin: 0px;
-    color: white;
-    font-size: 15px;
-    text-decoration: none;
-}
-
-/* Button design */
-.container {
-    display: flex;
-}
-
-.card {
-margin: 10px;
-background-color: #959393;
-height: 150px;
-width: 100px;
-flex: 1;
-border-radius: 16px;
-transition: all 0.3s ease;
-display: flex;
-align-items: center;
-justify-content: center;
-
-font-weight: bold;
-color: var(--color-cream);
-}
-
-.card:hover {
-flex: 2;
-background-color: #b8b8b8;
 }
 
 /* Profile Picture Design */
@@ -105,7 +45,7 @@ background-color: #b8b8b8;
     fill: rgb(176, 176, 176);
 }
 
-.profile_name {
+.profile-name {
     color: white;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     padding-left: 5px;

@@ -1,0 +1,47 @@
+#panels > div {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#current-menu, #previous-menu {
+    flex: 2.5;
+}
+
+#new-item {
+    flex: 1.75;
+}
+
+.vertical-menu-container {
+    height: calc(100% - 50px + 10px);
+    max-height: calc(100% - 50px + 10px);
+    overflow: scroll;
+}
+
+.vertical-menu-container, .vertical-menu-container tbody, .vertical-menu-container tr {
+    width: 100%;
+}
+
+.vertical-menu-container table {
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+}
+
+.vertical-menu-container tbody {
+    height: 100%;
+    width: 100%;
+    outline: var(--color-grey) solid 1px;
+}
+
+.vertical-menu-container .food-image img {
+    height: 150px;
+    width: 150px;
+}
+
+.vertical-menu-container tr {
+    outline: var(--color-grey) solid 1px;
+}
+
+.recently-moved {
+    background-color: var(--color-yellow);
+}

@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session
 
 # Startup functions / --------------------
 
@@ -79,6 +79,33 @@ def validate_user_type(required_user_types):
         return redirect(url_for('get_login_page'))
     return True
 
+# Returns JSON containing all objects currently in the menu
+@app.route('/current-menu-items', methods=["GET"])
+def current_menu_items():
+    current_items = []
+
+    for item in get_menu_items():
+        item_to_add = {"id": item.mid,
+                       "name": item.name,
+                       "price": item.price,
+                       "imageSource": item.get_image_path()}
+        current_items.append(item_to_add)
+    
+    return jsonify(current_items)
+
+# Returns JSON containing all objects currently removed from the menu
+@app.route('/removed-menu-items', methods=['GET'])
+def removed_menu_items():
+    removed_items = []
+
+    for item in get_removed_menu_items():
+        item_to_add = {"id": item.mid,
+                       "name": item.name,
+                       "price": item.price,
+                       "imageSource": item.get_image_path()}
+        removed_items.append(item_to_add)
+    
+    return jsonify(removed_items)
 
 # ---------------------------------
 # Manager pages
@@ -97,6 +124,47 @@ def manager_home():
                            first_name = session['first_name'],
                            last_name = session['last_name'])
 
+@app.route('/manager/alter-menu', methods=["GET"])
+def manager_menu_control():
+    # Check that the user is a manager
+    result = validate_user_type(['manager'])
+    if result is not True:
+        return result
+    
+    # If the user is a manager, show the page.
+    return render_template('manager_menu_control.html',
+                           first_name = session['first_name'],
+                           last_name = session['last_name'],
+                           current_menu_items = get_menu_items(),
+                           removed_menu_items = get_removed_menu_items())
+
+@app.route('/manager/alter-menu', methods=["POST"])
+def manager_post_menu_changes():
+    # print(request.json)
+    new_items = request.json['newItems']
+    reinstated_items = request.json['reinstatedItems']
+    removed_items = request.json['removedItems']
+    # TODO: Add entirely new items to the menu
+
+    for item in reinstated_items:
+        query_result = MenuItem.query.filter_by(mid=item['id']).first()
+        if query_result is None:
+            print("ITEM NOT FOUND: " + item['name'])
+        else:
+            print("Item returned to menu: " + query_result.name)
+            query_result.visible = True
+    
+    for item in removed_items:
+        query_result = MenuItem.query.filter_by(mid=item['id']).first()
+        if query_result is None:
+            print("ITEM NOT FOUND: " + item['name'])
+        else:
+            print("Item removed from menu: " + query_result.name)
+            query_result.visible = False
+
+    db.session.commit()
+    
+    return jsonify({"changes_complete": True})
 
 # ---------------------------------
 # Cashier pages

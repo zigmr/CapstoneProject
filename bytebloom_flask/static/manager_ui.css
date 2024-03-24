@@ -1,132 +1,62 @@
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-/* .navbar {
-  background-color: #333;
-  overflow: hidden;
-} */
-
-.navbar-brand {
-  float: left;
-  padding: 10px 15px;
-  color: white;
-  font-size: 20px;
-  text-decoration: none;
-}
-
-.navbar-brand:hover {
-  background-color: #111;
-}
-
-.container {
-  display: flex;
-  height: 100vh;
-}
-
-.left-side {
-  flex: 1;
-  /* background-color: #f0f0f0; */
-  overflow: hidden;
-}
-
-.right-side {
-  flex: 2;
-  /* background-color: #ddd; */
-  overflow: hidden;
-}
-
-.box {
-  width: 350px;
-  overflow: hidden;
-  height: 600px;
-  background-color: #a1c8bb;
-  line-height: 40px;
-  margin: 30px;
-  border-radius: 5px;
-  box-shadow: 8px 8px 25px #d9d9d9, -8px -8px 25px #ffffff;
-}
-
-.nav-bar-right {
+.nav-bar {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #333;
-  width: 100%;
-  height: auto;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  width: 100%; /* Ensure the navbar spans the entire width of .box_2 */
+  height: 50px; /* Allow the navbar to be only as tall as its content */
+  border-radius: 5px;
 }
 
 .nav-bar-text {
   float: left;
   padding: 5px 15px;
+  margin: 0px;
   color: white;
   font-size: 15px;
   text-decoration: none;
 }
 
-.container {
-  display: flex;
+/* Control panel styling */
+#controls {
+  flex: 5;
 }
 
+#controls-buttons {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 50px + 10px);
+  max-height: calc(100% - 50px + 10px);
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Control button styling */
 .card {
-  margin: 10px;
-  background-color: #959393;
-  height: 150px;
-  width: 100px;
-  flex: 1;
   border-radius: 16px;
+  background-color: #959393;
+
+  font-weight: bold;
+  font-style: normal;
+  color: var(--color-cream);
+  text-decoration: none;
+
+  margin: 10px;
+  width: calc(45% - 20px);
   transition: all 0.3s ease;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  color: #d9d9d9;
 }
 
 .card:hover {
-  flex: 2;
+  width: calc(50% - 20px);
   background-color: #b8b8b8;
-}
-/* Profile Picture Design */
-
-.profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  width: 80%;
-  height: 50%;
-  margin-top: auto;
-  margin-bottom: auto;
-
-  background-color: #959393;
-  border: 5px solid var(--color-grey);
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
-}
-
-.profile_image {
-  background-color: transparent;
-  border: none;
-  margin-top: 10px;
-  width: 50px;
-  height: 50px;
-}
-
-.pfp {
-  border-radius: 35em;
-  fill: rgb(176, 176, 176);
-}
-
-.profile_name {
-  color: white;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  padding-left: 5px;
-  padding-right: 5px;
-  font-size: 12px;
-  font-weight: 500;
 }

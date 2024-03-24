@@ -1,7 +1,6 @@
 from flask import url_for
 from flask_sqlalchemy import SQLAlchemy
 import datetime
-import os
 
 from app import app
 
@@ -116,6 +115,10 @@ class MenuItem(db.Model):
 def get_menu_items():
     """Returns a list of MenuItems which are currently on the menu."""
     return MenuItem.query.filter_by(visible=True)
+
+def get_removed_menu_items():
+    """Returns a list of MenuItems which are currently not on the menu."""
+    return MenuItem.query.filter_by(visible=False)
     
 class MenuItemInfo(db.Model):
     """Data representing a shipment of a single type of product.
@@ -147,7 +150,7 @@ def drop_all():
 @app.cli.command("db_populate")
 def populate_users():
     """CLI tool to populate table with test data. Run with \"flask db_populate\""""
-    test_manager = Employee(FirstName="Manager", LastName="Gamra", Email="test@test.org")
+    test_manager = Employee(FirstName="Zineb", LastName="Gamra", Email="test@test.org")
     test_manager_credentials = UserCredential(Username="ZinebGamra", Password="foo", EmployeeRole="manager", employee=test_manager)
     test_cashier = Employee(FirstName="Nya", LastName="James", Email="test@test.org")
     test_cashier_credentials = UserCredential(Username="NyaJames", Password="bar", EmployeeRole="cashier", employee=test_cashier)
@@ -163,8 +166,8 @@ def populate_users():
     doughnut = MenuItem(name='doughnut', price=2.99, image_path='doughnut.jpg')
     pretzel = MenuItem(name='pretzel', price=2.99, image_path='pretzel.jpg')
     pound_cake = MenuItem(name='pound cake', price=2.99, image_path='poundcake.jpg')
-    brioche = MenuItem(name='brioche', price=2.99, image_path='brioche.jpg')
-    banana_bread = MenuItem(name='banana bread', price=2.99, image_path='bananabread.jpg')
+    brioche = MenuItem(name='brioche', price=2.99, image_path='brioche.jpg', visible=False)
+    banana_bread = MenuItem(name='banana bread', price=2.99, image_path='bananabread.jpg', visible=False)
     macaroon = MenuItem(name='macaroon', price=2.99, image_path='macaroon.jpg')
     white_bread = MenuItem(name='white bread', price=2.99, image_path='whitebread.jpg')
 

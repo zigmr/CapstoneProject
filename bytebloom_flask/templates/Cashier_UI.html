@@ -6,6 +6,7 @@ Cashier Dashboard
 {% block unique_stylesheets %}
 <link rel="stylesheet" href="{{ url_for('static', filename='cashier_ui.css') }}" />
 <link rel="stylesheet" href="{{ url_for('static', filename='menu_listing.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='user_panel.css') }}" />
 {% endblock %}
 
 {% block content %}
@@ -13,7 +14,7 @@ Cashier Dashboard
   <!-- ----------------------------------------------------------------->
   <!-- Left Side Content here -->
 
-  <div class="user_panel">
+  <div id="user-panel">
     <div class="nav-bar">
       <h1 class="nav-bar-text">Cashier Profile</h1>
     </div>
