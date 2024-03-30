@@ -45,3 +45,38 @@
 .recently-moved {
     background-color: var(--color-yellow);
 }
+
+/* Item upload styling */
+
+#new-item-form {
+    border: solid 2px var(--color-grey);
+    margin: 10px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: max-content auto;
+}
+
+#new-item-form label {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#new-item-form input {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 15px;
+}
+
+#new-item-save-button {
+    grid-column-start: 0;
+    grid-column-end: 2;
+}
+
+#uploaded-image {
+    height: 200px;
+    width: 200px;
+}
+
+#save-changes {
+    width: 100%;
+}

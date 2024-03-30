@@ -59,7 +59,22 @@
             <h1 class="nav-bar-text">Add Menu Items</h1>
         </div>
         <div id="new-item-controls">
-            <button type="submit" id="save-changes">Save Changes</button>
+            <form id="new-item-form">
+                <label for="new-item-name">Name:</label>
+                <input type="text" required=true name="new-item-name" id="new-item-name">
+
+                <label for="new-item-price">Price (USD):</label>
+                <input type="number" required=true pattern="\d+.\d\d" step="0.01" name="new-item-price" id="new-item-price">
+
+                <label for="new-item-image">Image:</label>
+                <input type="file" required=true name="new-item-image" id="new-item-image">
+
+                <img id="uploaded-image">
+
+                <button type="button" id="new-item-save-button">Add new Item</button>
+            </form>
+                
+            <button id="save-changes">Save All Changes</button>
         </div>
     </div>
 
@@ -156,7 +171,6 @@
                 let idx = toAddNew.indexOf(this);                        // If the item was uploaded since the page loaded, remove it entirely.
                 if (idx != -1) {
                     let userResponse = prompt(`Remove new item ${this.name} from the menu? Type "${this.name.toUpperCase()}" to confirm.`);
-                    console.log(userResponse)
                     if (userResponse == this.name.toUpperCase()) {
                         toAddNew = toAddNew.slice(0, idx).concat(toAddNew.slice(idx + 1));
                         return;
@@ -215,6 +229,14 @@
             return newTR;
         }
     }
+
+    class NewMenuItem extends MenuItem {
+        constructor(id, imageSource, name, price, imageData) {
+            super(id, imageSource, name, price);
+
+            this.imageData = imageData;
+        }
+    }
     
     /**
      * Loads the items currently on the menu into the page and into a JS list.
@@ -250,6 +272,42 @@
         });
     }
 
+
+    let newImageButton = document.querySelector("#new-item-image");
+    newImageButton.onchange = e => {
+        let file = e.target.files[0];
+        let reader = new FileReader();
+        
+        reader.onload = e => {
+            let newImageDisplay = document.querySelector("#uploaded-image");
+            newImageDisplay.src = e.target.result;
+        }
+
+        reader.readAsDataURL(file);
+    }
+
+
+    let newItemButton = document.querySelector("#new-item-save-button");
+    function addNewItem() {
+        let name = document.querySelector("#new-item-name").value;
+        let price = document.querySelector("#new-item-price").value;
+        let image = document.querySelector("#uploaded-image").src;
+
+        let reader = new FileReader();
+        
+        reader.onload = e => {
+            image = e.target.result;
+        }
+
+        reader.readAsDataURL(document.querySelector("#new-item-image").files[0]);
+
+        let newItem = new NewMenuItem(-1, image, name, price, reader.result);
+        toAddNew.push(newItem);
+        document.querySelector("#current-menu tbody").appendChild(newItem.getCurrentItemTableRow());
+    }
+    newItemButton.addEventListener("click", addNewItem);
+
+
     /** Stores entirely new items slated to be added when the page is submitted
      * @type {Array<MenuItem>}
      */
@@ -266,25 +324,50 @@
     let toRemove = [];
 
     async function sendChanges() {
-        changesData = {
-            newItems: toAddNew,
-            reinstatedItems: toAddOld,
-            removedItems: toRemove
-        }
+        // Create a fake form to send the data with
+        let newForm = document.createElement("form");
+        newForm.id = "submitForm";
+        let formNewItems = document.createElement("input");
+        formNewItems.type = "text";
+        formNewItems.name = "newItems";
+        formNewItems.value = JSON.stringify(toAddNew);
+        newForm.appendChild(formNewItems);
+        let formReinstate = document.createElement("input");
+        formReinstate.type = "text";
+        formReinstate.name = "reinstatedItems";
+        formReinstate.value = JSON.stringify(toAddOld);
+        newForm.appendChild(formReinstate);
+        let formRemove = document.createElement("input");
+        formRemove.type = "text";
+        formRemove.name = "removedItems";
+        formRemove.value = JSON.stringify(toRemove);
+        newForm.appendChild(formRemove);
+        let formSendButton = document.createElement("button");
+        formSendButton.name = "sendButton";
+        formSendButton.value = "sendButton";
+        newForm.appendChild(formSendButton);
 
+        // Make an object to send the data with
+        let changesData = new FormData(newForm, formSendButton);
+        // console.log("Data sent:");
+        // console.log(changesData);
+
+        // POST the data to the server
         my_response = await fetch("/manager/alter-menu",
         {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(changesData)
+            body: changesData
         });
-
-        console.log(await my_response.json())
+        
+        // If the server says that the operation completed, reload the page.
+        response_data = await my_response.json();
+        if(response_data.changes_complete) {
+            console.log("Changes complete. Reloading...");
+            location.reload();
+        }
     }
 
-    document.querySelector("#save-changes").addEventListener("click", sendChanges);
+    document.querySelector("#save-changes").addEventListener("click", () => sendChanges());
 
     loadCurrentItems();
     loadRemovedItems();

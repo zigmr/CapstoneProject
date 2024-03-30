@@ -1,4 +1,5 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
+import json
 
 # Startup functions / --------------------
 
@@ -140,30 +141,34 @@ def manager_menu_control():
 
 @app.route('/manager/alter-menu', methods=["POST"])
 def manager_post_menu_changes():
-    # print(request.json)
-    new_items = request.json['newItems']
-    reinstated_items = request.json['reinstatedItems']
-    removed_items = request.json['removedItems']
-    # TODO: Add entirely new items to the menu
+    newItems = json.loads(request.form.get("newItems"))
+    reinstatedItems = json.loads(request.form.get("reinstatedItems"))
+    removedItems = json.loads(request.form.get("removedItems"))
 
-    for item in reinstated_items:
-        query_result = MenuItem.query.filter_by(mid=item['id']).first()
-        if query_result is None:
-            print("ITEM NOT FOUND: " + item['name'])
-        else:
-            print("Item returned to menu: " + query_result.name)
-            query_result.visible = True
+    for item in reinstatedItems:
+        item_db_version = MenuItem.query.filter_by(mid=item['id']).first()
+
+        item_db_version.name = item['name']
+        item_db_version.price = item['price']
+        if item['imageSource'] != item_db_version.get_image_path():
+            newPath = item['imageSource'].replace('static/' + app.config['UPLOAD_FOLDER'] + "/", "")
+            item_db_version.image_path = newPath
+
+        item_db_version.visible = True
     
-    for item in removed_items:
-        query_result = MenuItem.query.filter_by(mid=item['id']).first()
-        if query_result is None:
-            print("ITEM NOT FOUND: " + item['name'])
-        else:
-            print("Item removed from menu: " + query_result.name)
-            query_result.visible = False
+    for item in removedItems:
+        item_db_version = MenuItem.query.filter_by(mid=item['id']).first()
+
+        item_db_version.name = item['name']
+        item_db_version.price = item['price']
+        if item['imageSource'] != item_db_version.get_image_path():
+            newPath = item['imageSource'].replace('static/' + app.config['UPLOAD_FOLDER'] + "/", "")
+            item_db_version.image_path = newPath
+        
+        item_db_version.visible = False
 
     db.session.commit()
-    
+
     return jsonify({"changes_complete": True})
 
 # ---------------------------------
