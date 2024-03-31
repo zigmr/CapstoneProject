@@ -89,7 +89,6 @@
 }
 
 #cart td {
-    height: 100%;
     width: auto;
 }
 
@@ -99,7 +98,6 @@
 }
 
 .cart-food-details {
-    display: flex;
     align-items: center;
 }
 

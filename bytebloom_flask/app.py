@@ -210,3 +210,37 @@ def cashier_menu():
                            first_name = session['first_name'],
                            last_name = session['last_name'],
                            menu_contents=get_menu_items())
+
+# Processes orders placed by cashiers
+@app.route("/cashier/send_order", methods=["POST"])
+def recieve_order():
+    sent_json = request.json
+    if len(sent_json) == 0:
+        return jsonify({"changes_complete": False, "order_status": "empty cart"})
+    
+    new_order = Order()
+    for item in sent_json:
+        db_menu_item = MenuItem.query.filter_by(name=item['name']).first()
+        new_order_item = OrderedItemType(item_type=db_menu_item, order=new_order, count=item['amount'])
+
+        quantity_to_remove = int(item['amount'])
+        while quantity_to_remove > 0:
+            db_oldest_inventory = MenuItemInfo.query.filter_by(mid=db_menu_item.mid).where(MenuItemInfo.quantity > 0).order_by(MenuItemInfo.expiration_date).first()
+            if (db_oldest_inventory is None):   # There's not enough stock left
+                return jsonify({"changes_complete": False, "order_status": "not enough stock", "insufficient_stock": item['name']})
+            
+            # print("quantity to remove: " + str(quantity_to_remove))
+            # print("items in next stalest order: " + str(db_oldest_inventory.quantity))
+            if quantity_to_remove <= db_oldest_inventory.quantity:
+                db_oldest_inventory.quantity -= quantity_to_remove
+                quantity_to_remove = 0
+            else:
+                quantity_to_remove -= db_oldest_inventory.quantity
+                db_oldest_inventory.quantity = 0
+            # print("items left over: " + str(db_oldest_inventory.quantity))
+
+    db.session.add(new_order)
+    db.session.commit()
+
+    return jsonify({"changes_complete": True, "order_status": "fulfilled"})
+
