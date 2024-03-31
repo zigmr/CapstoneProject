@@ -183,3 +183,21 @@ def cashier_menu():
                            first_name = session['first_name'],
                            last_name = session['last_name'],
                            menu_contents=get_menu_items())
+
+# Processes orders placed by cashiers
+@app.route("/cashier/send_order", methods=["POST"])
+def recieve_order():
+    sent_json = request.json
+    if len(sent_json) == 0:
+        return jsonify({"changes_complete": True})
+    
+    new_order = Order()
+    for item in sent_json:
+        db_menu_item = MenuItem.query.filter_by(name=item['name']).first()
+        new_order_item = OrderedItemType(item_type=db_menu_item, order=new_order, count=item['amount'])
+    
+    db.session.add(new_order)
+    db.session.commit()
+
+    return jsonify({"changes_complete": True})
+

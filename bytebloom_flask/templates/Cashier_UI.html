@@ -119,15 +119,17 @@ Cashier Dashboard
       const cartItems = document.getElementById('cart-items');
       const newRow = document.createElement('tr');
       newRow.innerHTML = `
-              <td>
+              <td class="cart-food-details">
                   <img src="${imagePath}" alt="${name}" class="cart-food-image">
-                  ${name}
+                  <span>${name}</span>
               </td>
-              <td>
+              <td class="cart-food-quantity">
+                <form class="cart-adjust-quantity">
                   <input type="button" value="+" class="increase-quantity">
                   <p>1</p>
                   <input type="button" value="-" class="decrease-quantity">
                   <input type="button" value="🗑" class="remove-item">
+                </form>
               </td>
               <td class="cart-food-price">${price.toFixed(2)}</td>
           `;
@@ -185,6 +187,37 @@ Cashier Dashboard
       console.log('Promotion Code:', promoCode);
       // Update subtotal accordingly
       updateSubtotal();
+    });
+
+    // Code for sending order data
+    const sendOrderBtn = document.querySelector('.submit');
+    sendOrderBtn.addEventListener('click', async function (event) {
+      event.preventDefault();
+      const cartItemElems = document.querySelectorAll('#cart-items tr');
+      let cartItems = [];
+
+      cartItemElems.forEach(item => {
+        let name = item.querySelector('.cart-food-details span').innerHTML;
+        let amount = item.querySelector('.cart-food-quantity p').innerHTML;
+        cartItems.push({
+          name: name,
+          amount: amount
+        });
+      });
+
+      console.log(cartItems);
+
+      response = await fetch('/cashier/send_order', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartItems)
+      });
+
+      if((await response.json())['changes_complete'] == true) {
+        location.reload();
+      }
     });
   });
 </script>
