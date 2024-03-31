@@ -46,6 +46,10 @@
     background-color: var(--color-yellow);
 }
 
+.newly-added {
+    background-color: var(--color-cream);
+}
+
 /* Item upload styling */
 
 #new-item-form {

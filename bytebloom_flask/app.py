@@ -1,10 +1,13 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
-import json
+from werkzeug.utils import secure_filename
+import json, os.path
 
 # Startup functions / --------------------
 
 app = Flask(__name__)
 app.secret_key = '156da9a0758ed359ef8a6015c1bead42744758c8b4d629d50dfa18737bd647ad'
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webm'}
 
 from db_models import *     # Imports objects from the database *after* they have been added to the database
 
@@ -145,6 +148,23 @@ def manager_post_menu_changes():
     reinstatedItems = json.loads(request.form.get("reinstatedItems"))
     removedItems = json.loads(request.form.get("removedItems"))
 
+    # If there are new items, store them in the database and their images in the appropriate folder.
+    if 'newElemImage' in request.files:
+        uploaded_files = request.files.getlist('newElemImage')
+
+        assembledNewItems = zip(newItems, uploaded_files)
+        for newItemData in assembledNewItems:
+            name = newItemData[0]['name']
+            price = newItemData[0]['price']
+            new_image = newItemData[1]
+            new_image_name = secure_filename(new_image.filename)
+            new_image_loc = os.path.join('static', app.config['UPLOAD_FOLDER'], new_image_name)
+
+            new_image.save(new_image_loc)
+            new_menu_item = MenuItem(name=name, price=price, image_path=new_image_name)
+            db.session.add(new_menu_item)
+
+    # Update each item that's been returned to the menu
     for item in reinstatedItems:
         item_db_version = MenuItem.query.filter_by(mid=item['id']).first()
 
@@ -156,6 +176,7 @@ def manager_post_menu_changes():
 
         item_db_version.visible = True
     
+    # Update each item that's been removed from the menu
     for item in removedItems:
         item_db_version = MenuItem.query.filter_by(mid=item['id']).first()
 
@@ -167,6 +188,7 @@ def manager_post_menu_changes():
         
         item_db_version.visible = False
 
+    # Save the changes
     db.session.commit()
 
     return jsonify({"changes_complete": True})

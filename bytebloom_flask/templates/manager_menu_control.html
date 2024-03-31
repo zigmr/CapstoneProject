@@ -138,7 +138,7 @@
 
             const priceTD = document.createElement("td");
             priceTD.className = "food-price";
-            priceTD.innerHTML = this.price;
+            priceTD.innerHTML = "$" + this.price;
             newTR.appendChild(priceTD);
 
             const editTD = document.createElement("td");
@@ -163,6 +163,11 @@
             removeButton.innerHTML = "Remove From Menu";
             removeTD.appendChild(removeButton);
             newTR.appendChild(removeTD);
+
+            let idx = toAddNew.indexOf(this);
+            if (idx != -1) {
+                newTR.className = "newly-added";
+            }
 
             // Adds the listener to move the item to the removed list when "remove" is clicked
             removeButton.addEventListener("click", () => {
@@ -272,36 +277,34 @@
         });
     }
 
-
+    /**
+     * Displays a preview of an item when it's added to the form.
+     */
     let newImageButton = document.querySelector("#new-item-image");
     newImageButton.onchange = e => {
         let file = e.target.files[0];
         let reader = new FileReader();
         
-        reader.onload = e => {
+        reader.onload = readFile => {
             let newImageDisplay = document.querySelector("#uploaded-image");
-            newImageDisplay.src = e.target.result;
+            newImageDisplay.src = readFile.target.result;
         }
 
         reader.readAsDataURL(file);
     }
 
 
+    /**
+     * Appends the item described in the new item form to the list of menu items.
+     */
     let newItemButton = document.querySelector("#new-item-save-button");
     function addNewItem() {
         let name = document.querySelector("#new-item-name").value;
         let price = document.querySelector("#new-item-price").value;
         let image = document.querySelector("#uploaded-image").src;
+        let imageData = document.querySelector("#new-item-image").files[0];
 
-        let reader = new FileReader();
-        
-        reader.onload = e => {
-            image = e.target.result;
-        }
-
-        reader.readAsDataURL(document.querySelector("#new-item-image").files[0]);
-
-        let newItem = new NewMenuItem(-1, image, name, price, reader.result);
+        let newItem = new NewMenuItem(-1, image, name, price, imageData);
         toAddNew.push(newItem);
         document.querySelector("#current-menu tbody").appendChild(newItem.getCurrentItemTableRow());
     }
@@ -309,7 +312,7 @@
 
 
     /** Stores entirely new items slated to be added when the page is submitted
-     * @type {Array<MenuItem>}
+     * @type {Array<NewMenuItem>}
      */
     let toAddNew = [];
 
@@ -323,6 +326,9 @@
      */
     let toRemove = [];
 
+    /**
+     * Sends changes made on this page to the server.
+     */
     async function sendChanges() {
         // Create a fake form to send the data with
         let newForm = document.createElement("form");
@@ -349,6 +355,12 @@
 
         // Make an object to send the data with
         let changesData = new FormData(newForm, formSendButton);
+
+        // Store the images for the new items with the image
+        toAddNew.forEach(element => {
+            changesData.append("newElemImage", element.imageData);
+        });
+
         // console.log("Data sent:");
         // console.log(changesData);
 
