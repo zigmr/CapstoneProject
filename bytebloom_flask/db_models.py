@@ -213,7 +213,7 @@ def populate_users():
     banana_bread.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))
     macaroon.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))
     white_bread.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))
-    bread.current_stock.append(MenuItemInfo(quantity=250, expiration_date=datetime.date(2025, 1, 31)))
+    bread.current_stock.append(MenuItemInfo(quantity=250, expiration_date=datetime.date(2024, 1, 31)))
 
     full_order_1 = Order()
 

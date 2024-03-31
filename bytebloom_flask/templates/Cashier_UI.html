@@ -205,6 +205,11 @@ Cashier Dashboard
         });
       });
 
+      if (cartItems.length == 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
       console.log(cartItems);
 
       response = await fetch('/cashier/send_order', {
@@ -215,8 +220,21 @@ Cashier Dashboard
         body: JSON.stringify(cartItems)
       });
 
-      if((await response.json())['changes_complete'] == true) {
+      response_json = await response.json();
+      if (response_json['changes_complete'] == true) {
+        console.log("success");
         location.reload();
+      } else {
+        let problem = response_json['order_status'];
+        if (problem == 'empty cart') {
+          alert("Your cart is empty!");
+        }
+        else if (problem == 'not enough stock') {
+          let alertString = "There was not enough ";
+          alertString = alertString.concat(response_json['insufficient_stock']);
+          alertString = alertString.concat(' left in stock to complete your order. The item has not been sold.')
+          alert(alertString);
+        }
       }
     });
   });
