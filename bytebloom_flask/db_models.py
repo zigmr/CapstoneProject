@@ -1,3 +1,4 @@
+import click
 from flask import url_for
 from flask_sqlalchemy import SQLAlchemy
 import datetime
@@ -177,6 +178,18 @@ class Order(db.Model):
     promo_code = db.relationship("PromoCode")
     cashier = db.relationship("Employee")
 
+    def get_cost(self):
+        subtotal = 0
+        for item in self.items:
+            unit_cost = item.item_type.price
+            item_cost = unit_cost * item.count
+            subtotal += item_cost
+        if self.promo_code is not None:
+            total = subtotal * self.promo_code.discount_multiplier
+        else:
+            total = subtotal
+        return total
+
 class PromoCode(db.Model):
     """Represents a promotion code created by the store.
     Affects all items in the cart.
@@ -276,6 +289,16 @@ def make_tables():
 def print_menu():
     for item in get_menu_items():
         print(item.name)
+
+@app.cli.command("see_order_cost")
+@click.argument("order_id")
+def see_order_cost(order_id):
+    order = Order.query.filter_by(id=order_id).first()
+    if order is None:
+        print("Order with that ID not found")
+        return
+    else:
+        print(order.get_cost())
 
 # Startup --------
 initialize_database()   # call the initialize_database function and pull up login

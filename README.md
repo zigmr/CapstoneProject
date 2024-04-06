@@ -22,3 +22,4 @@ Bytebloom contains a number of command line tools which provide useful functiona
 |Command|Effect|
 |-|-|
 |flask menu|Displays the names of all menu items which will be visible in the cashier interface.|
+|flask see_order_cost <order id>|Displays the total cost of all items in a specific purchase.|
