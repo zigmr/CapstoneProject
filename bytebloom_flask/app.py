@@ -1,6 +1,6 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from werkzeug.utils import secure_filename
-import json, os.path
+import json, os.path, datetime
 
 # Startup functions / --------------------
 
@@ -32,6 +32,7 @@ def login_user():
     
     if valid_credential:
         print(f"Logged in user {username}. Full name: {str(valid_credential.employee)}")
+        session['employee_id'] = valid_credential.EmployeeID
         session['username'] = username
         session['user_type'] = valid_credential.EmployeeRole
         session['first_name'] = valid_credential.employee.FirstName
@@ -214,6 +215,13 @@ def cashier_menu():
 # Processes orders placed by cashiers
 @app.route("/cashier/send_order", methods=["POST"])
 def recieve_order():
+    # Validate that the person sending the order is a cashier
+    result = validate_user_type(['cashier'])
+    if result is not True:
+        return result
+
+    purchase_time = datetime.datetime.now()
+    cashier_id = session['employee_id']
     sent_json = request.json
     card_number = sent_json['card_number']
     promo_code = sent_json['promo_code']
@@ -227,7 +235,7 @@ def recieve_order():
     if len(cart_items) == 0:
         return jsonify({"changes_complete": False, "order_status": "empty cart"})
     
-    new_order = Order(card_number=card_number)
+    new_order = Order(card_number=card_number, cashier_id=cashier_id, purchase_time = purchase_time)
     if promo_code != "":
         new_order.promo_code_id=promo_code
 

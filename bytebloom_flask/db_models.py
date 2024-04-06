@@ -35,7 +35,7 @@ class Employee(db.Model):
     - UserCredential: login information
     """
 
-    __tablename__ = 'Employees'
+    __tablename__ = 'Employee'
 
     EmployeeID = db.Column(db.Integer, primary_key=True)
     FirstName = db.Column(db.String(50))
@@ -67,7 +67,7 @@ class UserCredential(db.Model):
     CredentialID = db.Column(db.Integer, primary_key=True)
     Username = db.Column(db.String(50), unique=True, nullable=False)
     Password = db.Column(db.String(50), nullable=False)
-    EmployeeID = db.Column(db.Integer, db.ForeignKey('Employees.EmployeeID'))
+    EmployeeID = db.Column(db.Integer, db.ForeignKey('Employee.EmployeeID'))
     EmployeeRole = db.Column(db.String(50), nullable=False)
     employee = db.relationship("Employee", back_populates="credential")
 
@@ -163,14 +163,19 @@ class Order(db.Model):
     - card_number (int): the card number of the customer who placed the order
     - promo_code_id (String): a promotion code used with the order. Optional.
     - items (OrderedItemType): a list of the types of food in the order
+    - cashier (Employee): the cashier responsible for placing the order
+    - purchase_time (datetime.datetime): the local time that the purchase was recieved at the server
     """
     __tablename__ = "Order"
     id = db.Column(db.Integer, primary_key=True)
     card_number = db.Column(db.Integer, nullable=False)
     promo_code_id = db.Column(db.String, db.ForeignKey("PromoCode.code"), nullable=True)
+    cashier_id = db.Column(db.Integer, db.ForeignKey("Employee.EmployeeID"), nullable=False)
+    purchase_time = db.Column(db.DateTime, nullable=False)
     
     items = db.relationship("OrderedItemType", back_populates="order")
     promo_code = db.relationship("PromoCode")
+    cashier = db.relationship("Employee")
 
 class PromoCode(db.Model):
     """Represents a promotion code created by the store.
