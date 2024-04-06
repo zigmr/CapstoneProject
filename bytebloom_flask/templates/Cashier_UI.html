@@ -93,6 +93,7 @@ Cashier Dashboard
       </table>
     </div>
     <form id="cart-summary">
+      <input type="text" id="card-number" placeholder="Enter credit card number">
       <input type="text" id="promo-code" placeholder="Enter Promotion Code">
       <input type="submit" value="Apply" id="apply-promo">
       <input type="submit" value="Place Order" class="submit">
@@ -103,6 +104,9 @@ Cashier Dashboard
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector("#card-number").value = "";
+    document.querySelector("#promo-code").value = "";
+
     const addToCartButtons = document.querySelectorAll('.add-to-cart');
 
     addToCartButtons.forEach(button => {
@@ -193,9 +197,10 @@ Cashier Dashboard
     const sendOrderBtn = document.querySelector('.submit');
     sendOrderBtn.addEventListener('click', async function (event) {
       event.preventDefault();
+
+      // Read which items are in the cart
       const cartItemElems = document.querySelectorAll('#cart-items tr');
       let cartItems = [];
-
       cartItemElems.forEach(item => {
         let name = item.querySelector('.cart-food-details span').innerHTML;
         let amount = item.querySelector('.cart-food-quantity p').innerHTML;
@@ -204,29 +209,46 @@ Cashier Dashboard
           amount: amount
         });
       });
-
       if (cartItems.length == 0) {
         alert("Your cart is empty!");
         return;
       }
 
-      console.log(cartItems);
+      // Read the credit card number and promo code
+      card_number = document.querySelector("#card-number").value;
+      promo_code = document.querySelector("#promo-code").value;
+
+      // Assemble a response containing the cart information
+      order_data = {
+        card_number: card_number,
+        promo_code: promo_code,
+        cart_items: cartItems
+      };
+
+      console.log(order_data);
 
       response = await fetch('/cashier/send_order', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(cartItems)
+        body: JSON.stringify(order_data)
       });
 
       response_json = await response.json();
       if (response_json['changes_complete'] == true) {
         console.log("success");
+        
         location.reload();
       } else {
         let problem = response_json['order_status'];
-        if (problem == 'empty cart') {
+        if (problem == 'no JSON sent') {
+          alert("Did not send data to server. Contact a sysadmin for help.");
+        }
+        else if (problem == 'no card number sent') {
+          alert("You did not enter a card number! The order has not been processed.");
+        }
+        else if (problem == 'empty cart') {
           alert("Your cart is empty!");
         }
         else if (problem == 'not enough stock') {

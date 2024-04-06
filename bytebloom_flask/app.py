@@ -215,32 +215,43 @@ def cashier_menu():
 @app.route("/cashier/send_order", methods=["POST"])
 def recieve_order():
     sent_json = request.json
+    card_number = sent_json['card_number']
+    promo_code = sent_json['promo_code']
+    cart_items = sent_json['cart_items']
+
+    # Make sure that necessary data is present
     if len(sent_json) == 0:
+        return jsonify({"changes_complete": False, "order_status": "no JSON sent"})
+    if len(card_number) == 0:
+        return jsonify({"changes_complete": False, "order_status": "no card number sent"})
+    if len(cart_items) == 0:
         return jsonify({"changes_complete": False, "order_status": "empty cart"})
     
-    new_order = Order()
-    for item in sent_json:
+    new_order = Order(card_number=card_number)
+    if promo_code != "":
+        new_order.promo_code_id=promo_code
+
+    for item in cart_items:
         db_menu_item = MenuItem.query.filter_by(name=item['name']).first()
         new_order_item = OrderedItemType(item_type=db_menu_item, order=new_order, count=item['amount'])
 
+        # Deduct the necessary items from stock
         quantity_to_remove = int(item['amount'])
         while quantity_to_remove > 0:
+            # Find the soonest-to-expire inventory item that contains the item being sold
             db_oldest_inventory = MenuItemInfo.query.filter_by(mid=db_menu_item.mid).where(MenuItemInfo.quantity > 0).order_by(MenuItemInfo.expiration_date).first()
-            if (db_oldest_inventory is None):   # There's not enough stock left
+            if (db_oldest_inventory is None):
+                # The order fails. No changes are made to the database and the customer is not charged.
                 return jsonify({"changes_complete": False, "order_status": "not enough stock", "insufficient_stock": item['name']})
             
-            # print("quantity to remove: " + str(quantity_to_remove))
-            # print("items in next stalest order: " + str(db_oldest_inventory.quantity))
             if quantity_to_remove <= db_oldest_inventory.quantity:
                 db_oldest_inventory.quantity -= quantity_to_remove
                 quantity_to_remove = 0
             else:
                 quantity_to_remove -= db_oldest_inventory.quantity
                 db_oldest_inventory.quantity = 0
-            # print("items left over: " + str(db_oldest_inventory.quantity))
 
     db.session.add(new_order)
     db.session.commit()
 
     return jsonify({"changes_complete": True, "order_status": "fulfilled"})
-
