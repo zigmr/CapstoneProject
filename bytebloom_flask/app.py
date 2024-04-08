@@ -135,7 +135,7 @@ def manager_home():
         return result
     
     # If the user is a manager, show the page.
-    return render_template('Manager_UI.html',
+    return render_template('Manager_UI.jinja',
                            first_name = session['first_name'],
                            last_name = session['last_name'])
 
@@ -147,7 +147,7 @@ def manager_menu_control():
         return result
     
     # If the user is a manager, show the page.
-    return render_template('manager_menu_control.html',
+    return render_template('manager_menu_control.jinja',
                            first_name = session['first_name'],
                            last_name = session['last_name'],
                            current_menu_items = get_menu_items(),
@@ -217,7 +217,7 @@ def cashier_menu():
         return result
 
     #If the user is a cashier, show the page.
-    return render_template('Cashier_UI.html',
+    return render_template('Cashier_UI.jinja',
                            first_name = session['first_name'],
                            last_name = session['last_name'],
                            menu_contents=get_menu_items())
