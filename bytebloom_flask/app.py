@@ -1,6 +1,6 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from werkzeug.utils import secure_filename
-import json, os.path, datetime
+import json, os.path, random, datetime
 
 # Startup functions / --------------------
 
@@ -16,7 +16,17 @@ from db_models import *     # Imports objects from the database *after* they hav
 @app.route("/", methods=["GET"])
 
 def get_login_page():
-    return render_template('login_page.html')
+    food_image_paths = []
+    vertical_positions = []
+    horizontal_positions = []
+    for item in sorted(get_menu_items(), key=lambda x: random.random()):
+        food_image_paths.append(item.get_image_path())
+        vertical_positions.append(random.random() * 100)
+        horizontal_positions.append(random.random() * 100)
+    return render_template('login_page.jinja',
+                           food_image_paths=food_image_paths,
+                           vertical_positions=vertical_positions,
+                           horizontal_positions=horizontal_positions)
 
 
 # Route to handle form submission for login
@@ -45,7 +55,7 @@ def login_user():
             return redirect(url_for('cashier_menu'))
     else:
         flash('Invalid username or password.\nCheck your credentials and try again.')
-        return render_template('login_page.html')
+        return redirect(url_for('get_login_page'))
 
 
 # ---------------------------------

@@ -28,8 +28,14 @@
             {% endwith %}
         </div>
 
-        <div id="temp-panel">
-            <p>Import Design Here</p>
+        <div id="aesthetic-panel">
+            {% for x in range(food_image_paths | length) %}
+                <img class="fade-img" src="{{ food_image_paths[x] }}"
+                style="animation-delay: rem({{ x*3.5 }}s, 16s);
+                position: absolute;
+                top: abs({{ vertical_positions[x] }}% - 250px);
+                left: abs({{ horizontal_positions[x] }}% - 250px);">
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
