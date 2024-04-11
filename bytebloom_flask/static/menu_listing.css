@@ -146,3 +146,6 @@
     margin-left: auto;
 }
 
+.invalid-text-input {
+    color: crimson;
+}

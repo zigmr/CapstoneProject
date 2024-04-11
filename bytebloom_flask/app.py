@@ -233,7 +233,7 @@ def recieve_order():
     purchase_time = datetime.datetime.now()
     cashier_id = session['employee_id']
     sent_json = request.json
-    card_number = sent_json['card_number']
+    card_number = sent_json['card_number'].replace(" ", "")
     promo_code = sent_json['promo_code']
     cart_items = sent_json['cart_items']
 
@@ -245,6 +245,16 @@ def recieve_order():
     if len(cart_items) == 0:
         return jsonify({"changes_complete": False, "order_status": "empty cart"})
     
+    # Validate card number
+    for card_char in card_number:
+        if not card_char.isdigit():
+            return jsonify({"changes_complete": False, "order_status": "invalid card number: contains letters"})
+    if len(card_number) < 8:
+        return jsonify({"changes_complete": False, "order_status": "invalid card number: too short"})
+    if len(card_number) > 19:
+        return jsonify({"changes_complete": False, "order_status": "invalid card number: too long"})
+    
+    # Attempt to store the order
     new_order = Order(card_number=card_number, cashier_id=cashier_id, purchase_time = purchase_time)
     if promo_code != "":
         new_order.promo_code_id=promo_code
