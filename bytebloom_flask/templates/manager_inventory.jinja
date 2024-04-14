@@ -119,4 +119,20 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function filterInventory() {
+            let filter_text = document.getElementById("current-stock-filter-text").value;
+            let stock_trs = document.querySelectorAll("#current-stock tr");
+            stock_trs.forEach(element => {
+                let tr_name = element.querySelector(".shipment-type").innerHTML;
+                let matches_search = tr_name.toLowerCase().indexOf(filter_text.toLowerCase()) != -1;
+                let display_mode = "";
+                if (!matches_search) {
+                    display_mode = "none";
+                }
+                element.style.display = display_mode;
+            });
+        }
+    </script>
 {% endblock %}
