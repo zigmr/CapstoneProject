@@ -56,7 +56,7 @@
                 <form id="new-shipment-form">
                     <label for="new-shipment-item-options">Item to Add:</label>
                     <select name="new-shipment-item-options" id="new-shipment-item-options" onchange="displayInventoryItemImg();">
-                        <option value=""></option>
+                        <option value="default"></option>
                         <!-- Non-default options -->
                     </select>
                     
@@ -149,7 +149,12 @@
         function displayInventoryItemImg() {
             let select_value = items_drop_down.value;
             let preview_img_elem = document.getElementById("selected-item-img");
-            preview_img_elem.src = data[select_value];
+            if (select_value == "default") {
+                preview_img_elem.src = "";
+            }
+            else {
+                preview_img_elem.src = data[select_value];
+            }
         }
 
         async function signalClearExpired() {
