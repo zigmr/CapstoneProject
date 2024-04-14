@@ -231,7 +231,26 @@ def manager_inventory_screen():
 # Command to clear all items from inventory
 @app.route("/manager/clear-expired", methods=["POST"])
 def clear_expired_items():
-    return jsonify({"changes_complete": False})
+    sent_data = request.json
+    submitter_id = int(sent_data['submitter_id'])
+    submitter_username = sent_data['submitter_username']
+    submitter_type = sent_data['submitter_type']
+
+    # If the data about who sent the request is invalid, stop.
+    if submitter_id != session['employee_id'] or submitter_username != session['username'] or submitter_type != session['user_type']:
+        print("sent-data bad")
+        return jsonify({'changes_complete': False})
+    possible_user = Employee.query.filter_by(EmployeeID=submitter_id).first()
+    print(possible_user.credential)
+    if possible_user.credential.Username != submitter_username or possible_user.credential.EmployeeRole != submitter_type:
+        return jsonify({'changes_complete': False})
+
+    # Remove all items from expired shipments
+    expired_items = MenuItemInfo.query.where(MenuItemInfo.expiration_date < datetime.datetime.now())
+    for item in expired_items:
+        print(item)
+    return jsonify({'changes_complete': True})
+
 
 # ---------------------------------
 # Cashier pages

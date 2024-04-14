@@ -164,12 +164,17 @@
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({submitted_by: {{ session['employee_id'] }}})
+                body: JSON.stringify({
+                    submitter_id: "{{ session['employee_id'] }}",
+                    submitter_username: "{{ session['username'] }}",
+                    submitter_type: "{{ session['user_type'] }}"
+                })
             });
 
             response_json = await my_response.json();
             if (response_json['changes_complete'] == true) {
                 console.log('success');
+                location.reload();
             }
             else {
                 console.log('failure');
