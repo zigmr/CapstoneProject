@@ -63,17 +63,17 @@
         <div id="new-item-controls">
             <form id="new-item-form">
                 <label for="new-item-name">Name:</label>
-                <input type="text" required=true name="new-item-name" id="new-item-name">
+                <input type="text" name="new-item-name" id="new-item-name" required>
 
                 <label for="new-item-price">Price (USD):</label>
-                <input type="number" required=true pattern="\d+.\d\d" step="0.01" name="new-item-price" id="new-item-price">
+                <input type="number" pattern="\d+.\d\d" step="0.01" name="new-item-price" id="new-item-price" required>
 
                 <label for="new-item-image">Image:</label>
-                <input type="file" required=true name="new-item-image" id="new-item-image">
+                <input type="file" name="new-item-image" id="new-item-image" required>
 
                 <img id="uploaded-image">
 
-                <button type="button" id="new-item-save-button">Add new Item</button>
+                <button type="button" id="new-item-save-button">Add New Item</button>
             </form>
                 
             <button id="save-changes">Save All Changes</button>

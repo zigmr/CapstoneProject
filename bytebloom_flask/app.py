@@ -139,6 +139,7 @@ def manager_home():
                            first_name = session['first_name'],
                            last_name = session['last_name'])
 
+# UI for changing the menu
 @app.route('/manager/alter-menu', methods=["GET"])
 def manager_menu_control():
     # Check that the user is a manager
@@ -153,6 +154,7 @@ def manager_menu_control():
                            current_menu_items = get_menu_items(),
                            removed_menu_items = get_removed_menu_items())
 
+# Validates and saves changes to the menu
 @app.route('/manager/alter-menu', methods=["POST"])
 def manager_post_menu_changes():
     newItems = json.loads(request.form.get("newItems"))
@@ -203,6 +205,21 @@ def manager_post_menu_changes():
     db.session.commit()
 
     return jsonify({"changes_complete": True})
+
+# Display inventory control screen
+@app.route('/manager/inventory')
+def manager_inventory_screen():
+    result = validate_user_type(['manager'])
+    if result is not True:
+        return result
+    
+    # If the user is a manager, show the page
+    return render_template('manager_inventory.jinja',
+                           first_name = session['first_name'],
+                           last_name = session['last_name'],
+                           all_menu_items = MenuItem.query.with_entities(MenuItem.name).all(),
+                           inventory_stock = MenuItemInfo.query.where(MenuItemInfo.quantity > 0).order_by(MenuItemInfo.expiration_date).all(),
+                           current_time = datetime.datetime.date(datetime.datetime.now()))
 
 # ---------------------------------
 # Cashier pages
