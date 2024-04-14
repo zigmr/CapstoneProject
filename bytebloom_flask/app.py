@@ -5,7 +5,6 @@ import json, os.path, random, datetime
 # Startup functions / --------------------
 
 app = Flask(__name__)
-app.jinja_env.filters['json_loads'] = json.loads
 app.secret_key = '156da9a0758ed359ef8a6015c1bead42744758c8b4d629d50dfa18737bd647ad'
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webm'}
@@ -228,6 +227,11 @@ def manager_inventory_screen():
                            all_menu_items = json.dumps(dict_menu_items),
                            inventory_stock = MenuItemInfo.query.where(MenuItemInfo.quantity > 0).order_by(MenuItemInfo.expiration_date).all(),
                            current_time = datetime.datetime.date(datetime.datetime.now()))
+
+# Command to clear all items from inventory
+@app.route("/manager/clear-expired", methods=["POST"])
+def clear_expired_items():
+    return jsonify({"changes_complete": False})
 
 # ---------------------------------
 # Cashier pages

@@ -46,7 +46,7 @@
         </div>
 
         <!-- --------------------------------------------------------------->
-        <!-- Current Inventory -->
+        <!-- Add new item -->
         <!-- --------------------------------------------------------------->
         <div id="control-panel">
             <div class="nav-bar">
@@ -76,7 +76,7 @@
                 </form>
             </div>
             <div id="remove-expired">
-                <button id="button-remove-expired">Remove All Expired Items from Inventory</button>
+                <button id="button-remove-expired" onclick="signalClearExpired()">Remove All Expired Items from Inventory</button>
             </div>
         </div>
 
@@ -164,7 +164,7 @@
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({submitted_by: "{{ session['employee_id'] }}"})
+                body: JSON.stringify({submitted_by: {{ session['employee_id'] }}})
             });
 
             response_json = await my_response.json();
