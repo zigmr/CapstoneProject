@@ -5,6 +5,7 @@ import json, os.path, random, datetime
 # Startup functions / --------------------
 
 app = Flask(__name__)
+app.jinja_env.filters['json_loads'] = json.loads
 app.secret_key = '156da9a0758ed359ef8a6015c1bead42744758c8b4d629d50dfa18737bd647ad'
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webm'}
@@ -209,15 +210,22 @@ def manager_post_menu_changes():
 # Display inventory control screen
 @app.route('/manager/inventory')
 def manager_inventory_screen():
+    # Determine that the user is a manager
     result = validate_user_type(['manager'])
     if result is not True:
         return result
     
-    # If the user is a manager, show the page
+    # Convert the menu items into a JSON object
+    db_menu_items = MenuItem.query.all()
+    dict_menu_items = {}
+    for item in db_menu_items:
+        dict_menu_items[item.name] = item.get_image_path()
+    
+    # Show the page
     return render_template('manager_inventory.jinja',
                            first_name = session['first_name'],
                            last_name = session['last_name'],
-                           all_menu_items = MenuItem.query.with_entities(MenuItem.name).all(),
+                           all_menu_items = json.dumps(dict_menu_items),
                            inventory_stock = MenuItemInfo.query.where(MenuItemInfo.quantity > 0).order_by(MenuItemInfo.expiration_date).all(),
                            current_time = datetime.datetime.date(datetime.datetime.now()))
 

@@ -55,10 +55,9 @@
             <div id="add-shipment">
                 <form id="new-shipment-form">
                     <label for="new-shipment-item-options">Item to Add:</label>
-                    <select name="new-shipment-item-options" id="new-shipment-item-options">
-                        {% for item in all_menu_items %}
-                            <option value="{{ item.name }}">{{ item.name }}</option>
-                        {% endfor %}
+                    <select name="new-shipment-item-options" id="new-shipment-item-options" onchange="displayInventoryItemImg();">
+                        <option value=""></option>
+                        <!-- Non-default options -->
                     </select>
                     
                     <img id="selected-item-img">
@@ -121,6 +120,18 @@
     </div>
 
     <script>
+        // On startup, fill in options in the control panel
+        let data = {{ all_menu_items|safe }};   // Load the JSON data about the menu items
+
+        let items_drop_down = document.getElementById("new-shipment-item-options");
+        Object.keys(data).forEach(item_name => {
+            let new_option = document.createElement("option");
+            new_option.value = item_name;
+            new_option.innerHTML = item_name;
+            items_drop_down.appendChild(new_option);
+        });
+        
+        // Misc. functions
         function filterInventory() {
             let filter_text = document.getElementById("current-stock-filter-text").value;
             let stock_trs = document.querySelectorAll("#current-stock tr");
@@ -133,6 +144,31 @@
                 }
                 element.style.display = display_mode;
             });
+        }
+
+        function displayInventoryItemImg() {
+            let select_value = items_drop_down.value;
+            let preview_img_elem = document.getElementById("selected-item-img");
+            preview_img_elem.src = data[select_value];
+        }
+
+        async function signalClearExpired() {
+            let my_response = await fetch("/manager/clear-expired",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({submitted_by: "{{ session['employee_id'] }}"})
+            });
+
+            response_json = await my_response.json();
+            if (response_json['changes_complete'] == true) {
+                console.log('success');
+            }
+            else {
+                console.log('failure');
+            }
         }
     </script>
 {% endblock %}
