@@ -1,0 +1,83 @@
+#panels > div {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#new-promotion, #current-promotions, #previous-promotions {
+    flex: 1;
+}
+
+.vertical-menu-container {
+    height: calc(100% - 50px + 10px);
+    max-height: calc(100% - 50px + 10px);
+    overflow: scroll;
+}
+
+.vertical-menu-container,
+.vertical-menu-container tbody,
+.vertical-menu-container tr {
+    width: 100%;
+}
+
+.vertical-menu-container table {
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+}
+
+.vertical-menu-container tbody {
+    height: 100%;
+    width: 100%;
+    outline: var(--color-grey) solid 1px;
+}
+
+.vertical-menu-container .food-image img {
+    height: 150px;
+    width: 150px;
+}
+
+.vertical-menu-container tr {
+    outline: var(--color-grey) solid 1px;
+}
+
+.new-promotion {
+    background-color: var(--color-cream);
+}
+
+.current-promotion {
+    background-color: var(--color-light-blue);
+}
+
+.previous-promotion {
+    background-color: var(--color-yellow);
+}
+
+/* New Promotion Form styling */
+
+#new-promotion-controls {
+    border: solid 2px var(--color-grey);
+    margin: 10px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto;
+}
+
+#new-promotion-controls label {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#new-promotion-controls input,
+#new-promotion-controls textarea,
+#new-promotion-controls select {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 15px;
+    width: calc(100% - 30px);
+}
+
+#new-promotion-save-button {
+    grid-column-start: 0;
+    grid-column-end: 2;
+    margin-top: 10px;
+}

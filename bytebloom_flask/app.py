@@ -36,10 +36,10 @@ def login_user():
     # Use forms to get username and pasword
     username = request.form.get('username')
     password = request.form.get('password')
-    
+
     # Query the database to find matching username and password
     valid_credential = UserCredential.query.filter_by(Username=username, Password=password).first()
-    
+
     if valid_credential:
         print(f"Logged in user {username}. Full name: {str(valid_credential.employee)}")
         session['employee_id'] = valid_credential.EmployeeID
@@ -73,11 +73,11 @@ def logout():
 # Validates that a user's credentials are sufficient to view a page
 def validate_user_type(required_user_types):
     """Determines whether the user's session is of an authorized credential category.
-    
+
     Parameters:
     - required_user_types (list): list containing strings describing permitted user types.
         - The list of user types used by this system are found in db_models.EMPLOYEE_ROLES
-    
+
     Postconditions:
     - If the session does not have a user type associated with it, a flashed message is added to the session. Returns a redirect to the login screen.
     - If the session's user type is not one of the types found in required_user_types, a flashed message is added to the session. Returns a redirect to the login screen.
@@ -105,7 +105,7 @@ def current_menu_items():
                        "price": item.price,
                        "imageSource": item.get_image_path()}
         current_items.append(item_to_add)
-    
+
     return jsonify(current_items)
 
 # Returns JSON containing all objects currently removed from the menu
@@ -119,7 +119,7 @@ def removed_menu_items():
                        "price": item.price,
                        "imageSource": item.get_image_path()}
         removed_items.append(item_to_add)
-    
+
     return jsonify(removed_items)
 
 # ---------------------------------
@@ -127,17 +127,74 @@ def removed_menu_items():
 # ---------------------------------
 
 # Landing page for managers
+# Route to handle creation of promotion
+@app.route('/manager/promotions/create', methods=['POST'])
+def create_promotion():
+    try:
+        # Extract promotion data from the request
+        promotion_data = request.json
+
+        # Validate promotion data
+        required_fields = ['code', 'description', 'discount', 'start_date', 'end_date']
+        if not all(field in promotion_data for field in required_fields):
+            return jsonify({'error': 'Incomplete promotion data provided'}), 400
+
+        code = str(promotion_data['code'])
+        description = str(promotion_data['description'])
+        discount = float(promotion_data['discount'])
+        start_date = promotion_data['start_date']
+        end_date = promotion_data['end_date']
+
+        # Additional validation
+        if not (0 <= discount <= 100):
+            return jsonify({'error': 'Invalid discount value. Must be a float between 0 and 100'}), 400
+
+        # Perform other validation as needed
+
+        # Create the promotion in the database
+        new_promotion = PromoCode(code=code, description=description, discount=discount, start_date=start_date, end_date=end_date)
+        db.session.add(new_promotion)
+        db.session.commit()
+
+        # Return success response
+        return jsonify({'message': 'Promotion created successfully'}), 201
+    except Exception as e:
+        # Handle any exceptions and return error response
+        return jsonify({'error': str(e)}), 500
+
+# Route to render manager home page
 @app.route("/manager/home", methods=["GET"])
 def manager_home():
     # Check that the user is a manager
     result = validate_user_type(['manager'])
     if result is not True:
         return result
-    
+
     # If the user is a manager, show the page.
     return render_template('Manager_UI.jinja',
-                           first_name = session['first_name'],
-                           last_name = session['last_name'])
+                           first_name=session['first_name'],
+                           last_name=session['last_name'])
+
+# Route to render promotion control page
+@app.route('/manager/promotions', methods=["GET"])
+def manager_promotion_control():
+    # Check that the user is a manager
+    result = validate_user_type(['manager'])
+    if result is not True:
+        return result
+
+    # If the user is a manager, show the page.
+    return render_template('manager_promotion_control.jinja',
+                           first_name=session['first_name'],
+                           last_name=session['last_name'],
+                           current_promotions=get_current_promotions())
+
+# Route to render removed promotions page
+@app.route('/manager/removed-promotions', methods=["GET"])
+def get_removed_promotions():
+    removed_promotions = []  # Fetch removed promotions from the database
+    # Logic to fetch removed promotions
+    return jsonify(removed_promotions)
 
 @app.route('/manager/alter-menu', methods=["GET"])
 def manager_menu_control():
@@ -145,7 +202,7 @@ def manager_menu_control():
     result = validate_user_type(['manager'])
     if result is not True:
         return result
-    
+
     # If the user is a manager, show the page.
     return render_template('manager_menu_control.jinja',
                            first_name = session['first_name'],
@@ -186,7 +243,7 @@ def manager_post_menu_changes():
             item_db_version.image_path = newPath
 
         item_db_version.visible = True
-    
+
     # Update each item that's been removed from the menu
     for item in removedItems:
         item_db_version = MenuItem.query.filter_by(mid=item['id']).first()
@@ -196,7 +253,7 @@ def manager_post_menu_changes():
         if item['imageSource'] != item_db_version.get_image_path():
             newPath = item['imageSource'].replace('static/' + app.config['UPLOAD_FOLDER'] + "/", "")
             item_db_version.image_path = newPath
-        
+
         item_db_version.visible = False
 
     # Save the changes
@@ -244,7 +301,7 @@ def recieve_order():
         return jsonify({"changes_complete": False, "order_status": "no card number sent"})
     if len(cart_items) == 0:
         return jsonify({"changes_complete": False, "order_status": "empty cart"})
-    
+
     # Validate card number
     for card_char in card_number:
         if not card_char.isdigit():
@@ -253,7 +310,7 @@ def recieve_order():
         return jsonify({"changes_complete": False, "order_status": "invalid card number: too short"})
     if len(card_number) > 19:
         return jsonify({"changes_complete": False, "order_status": "invalid card number: too long"})
-    
+
     # Attempt to store the order
     new_order = Order(card_number=card_number, cashier_id=cashier_id, purchase_time = purchase_time)
     if promo_code != "":
@@ -271,7 +328,7 @@ def recieve_order():
             if (db_oldest_inventory is None):
                 # The order fails. No changes are made to the database and the customer is not charged.
                 return jsonify({"changes_complete": False, "order_status": "not enough stock", "insufficient_stock": item['name']})
-            
+
             if quantity_to_remove <= db_oldest_inventory.quantity:
                 db_oldest_inventory.quantity -= quantity_to_remove
                 quantity_to_remove = 0
