@@ -162,11 +162,11 @@ document.getElementById('new-promotion-save-button').addEventListener('click', a
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            code,
-            description,
-            discount,
-            startDate,
-            endDate
+            code: code,
+            description: description,
+            discount: discount,
+            startDate: startDate,
+            endDate: endDate
         })
     });
 

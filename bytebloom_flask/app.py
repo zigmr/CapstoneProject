@@ -135,15 +135,15 @@ def create_promotion():
         promotion_data = request.json
 
         # Validate promotion data
-        required_fields = ['code', 'description', 'discount', 'start_date', 'end_date']
+        required_fields = ['code', 'description', 'discount', 'startDate', 'endDate']
         if not all(field in promotion_data for field in required_fields):
             return jsonify({'error': 'Incomplete promotion data provided'}), 400
 
         code = str(promotion_data['code'])
         description = str(promotion_data['description'])
         discount = float(promotion_data['discount'])
-        start_date = promotion_data['start_date']
-        end_date = promotion_data['end_date']
+        startDate = promotion_data['startDate']
+        endDate = promotion_data['endDate']
 
         # Additional validation
         if not (0 <= discount <= 100):
@@ -152,7 +152,7 @@ def create_promotion():
         # Perform other validation as needed
 
         # Create the promotion in the database
-        new_promotion = PromoCode(code=code, description=description, discount=discount, start_date=start_date, end_date=end_date)
+        new_promotion = PromoCode(code=code, description=description, discount=discount, startDate=startDate, endDate=endDate)
         db.session.add(new_promotion)
         db.session.commit()
 
