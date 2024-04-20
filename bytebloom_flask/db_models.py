@@ -251,7 +251,7 @@ def populate_users():
     cookie.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))
     croissant.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))
     bagel.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))
-    doughnut.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))
+    doughnut.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2023, 12, 31)))
     pretzel.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))
     pound_cake.current_stock.append(MenuItemInfo( quantity=500, expiration_date=datetime.date(2024, 12, 31)))
     brioche.current_stock.append(MenuItemInfo(quantity=500, expiration_date=datetime.date(2024, 12, 31)))

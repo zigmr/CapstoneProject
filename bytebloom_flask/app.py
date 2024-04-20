@@ -240,15 +240,13 @@ def clear_expired_items():
     if submitter_id != session['employee_id'] or submitter_username != session['username'] or submitter_type != session['user_type']:
         print("sent-data bad")
         return jsonify({'changes_complete': False})
-    possible_user = Employee.query.filter_by(EmployeeID=submitter_id).first()
-    print(possible_user.credential)
-    if possible_user.credential.Username != submitter_username or possible_user.credential.EmployeeRole != submitter_type:
-        return jsonify({'changes_complete': False})
 
     # Remove all items from expired shipments
     expired_items = MenuItemInfo.query.where(MenuItemInfo.expiration_date < datetime.datetime.now())
     for item in expired_items:
-        print(item)
+        # NB: if logging which items expire (and how many), record them during this step
+        db.session.delete(item)
+    db.session.commit()
     return jsonify({'changes_complete': True})
 
 
