@@ -136,7 +136,7 @@ class MenuItemInfo(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     expiration_date = db.Column(db.Date, nullable=False)
 
-    menu_item = db.relationship("MenuItem", back_populates="current_stock")
+    menu_item = db.relationship("MenuItem", uselist=False, back_populates="current_stock")
 
 class OrderedItemType(db.Model):
     """Represents exactly one type of item from a placed order.

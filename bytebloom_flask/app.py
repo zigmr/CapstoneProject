@@ -249,6 +249,24 @@ def clear_expired_items():
     db.session.commit()
     return jsonify({'changes_complete': True})
 
+@app.route("/manager/remove-single-item", methods=["POST"])
+def clear_single_item():
+    sent_data = request.json
+    item_name = sent_data['itemName']
+    item_amount = sent_data['itemAmount']
+    split_date = sent_data['itemExpirationDate'].split("-")
+    if len(split_date) != 3:
+        return jsonify({'changes_complete': False, 'update_status': 'invalid date format'})
+    item_date = datetime.date(int(split_date[0]), int(split_date[1]), int(split_date[2]))
+
+    selected_order = MenuItemInfo.query.where(MenuItem.name == item_name, MenuItemInfo.quantity == item_amount, MenuItemInfo.expiration_date == item_date).first()
+    print(selected_order)
+    # TODO: fix cartesion join problem.
+
+    db.session.delete(selected_order)
+    # db.session.commit()
+
+    return jsonify({'changes_complete': False})
 
 # ---------------------------------
 # Cashier pages

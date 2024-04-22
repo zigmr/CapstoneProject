@@ -106,7 +106,7 @@
                                 <td class="shipment-amount">{{ stock_item.quantity }} remaining</td>
                                 <td class="shipment-expiration-date">{{ stock_item.expiration_date }}</td>
                                 <td class="shipment-remove-td">
-                                    <button type="button">Remove From Stock</button>
+                                    <button type="button" onclick="removeSingleItem(event)">Remove From Stock</button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -179,6 +179,29 @@
             else {
                 console.log('failure');
             }
+        }
+        
+        async function removeSingleItem(event) {
+            let selectedItemRow = event.currentTarget.parentElement.parentElement;
+            
+            let itemName = selectedItemRow.querySelector(".shipment-type").innerHTML;
+            let itemAmount = selectedItemRow.querySelector(".shipment-amount").innerHTML.split(" remaining")[0];
+            let itemExpirationDate = selectedItemRow.querySelector(".shipment-expiration-date").innerHTML;
+            
+            let my_response = await fetch("/manager/remove-single-item", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    itemName: itemName,
+                    itemAmount: itemAmount,
+                    itemExpirationDate: itemExpirationDate
+                })
+            });
+
+            response_json = await my_response.json();
+            console.log(response_json);
         }
     </script>
 {% endblock %}
